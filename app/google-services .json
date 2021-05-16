@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "783590213663",
+    "project_id": "buddie-674a9",
+    "storage_bucket": "buddie-674a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783590213663:android:01a6328d85283e4877ad2a",
+        "android_client_info": {
+          "package_name": "com.buddiie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "783590213663-2pmrdventrd9iptdf7kra96d9g9eqc5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6Ged2ufiOg4CmidvP-qaL0i-DaQjWOOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "783590213663-2pmrdventrd9iptdf7kra96d9g9eqc5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
