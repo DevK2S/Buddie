@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "783590213663",
+    "firebase_url": "https://buddie-674a9-default-rtdb.firebaseio.com",
     "project_id": "buddie-674a9",
     "storage_bucket": "buddie-674a9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:783590213663:android:01a6328d85283e4877ad2a",
+        "mobilesdk_app_id": "1:783590213663:android:45dd542d2c6e61df77ad2a",
         "android_client_info": {
-          "package_name": "com.buddiie"
+          "package_name": "com.buddie"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "783590213663-1ovg9bcq0f8vg6k2psqqb8s9l9forl6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buddie",
+            "certificate_hash": "8075b98447b5e15ea8d51dac004c3f26bd1af29d"
+          }
+        },
         {
           "client_id": "783590213663-2pmrdventrd9iptdf7kra96d9g9eqc5c.apps.googleusercontent.com",
           "client_type": 3
