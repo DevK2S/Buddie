@@ -7,7 +7,7 @@
     android:background="#f7f7f7"
 
     android:gravity="center"
-    tools:context=".presentation.activities.enterNumber">
+    tools:context=".presentation.fragments.PhoneAuthFragment">
 
         <LinearLayout
             android:id="@+id/phoneLl"

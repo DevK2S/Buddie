@@ -1,4 +1,4 @@
-package com.buddie.presentation.activities
+package com.buddie.presentation.fragments
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -12,8 +12,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.buddie.R
-import com.buddie.databinding.ActivityLoginBinding
-import com.buddie.databinding.NumberEnterBinding
+import com.buddie.databinding.FragmentPhoneAuthBinding
+import com.buddie.presentation.activities.LoginActivity
+import com.buddie.presentation.activities.MainActivity
+import com.buddie.presentation.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -21,9 +23,10 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 
-class enterNumber:Fragment(R.layout.number_enter) {
+class PhoneAuthFragment:Fragment() {
 
-    private var enterNumberEnterBinding:NumberEnterBinding?=null
+    private lateinit var phoneAuthBinding:FragmentPhoneAuthBinding
+    lateinit var loginViewModel:LoginViewModel
 
     //For resending OTP
     private var forceResendingToken : PhoneAuthProvider.ForceResendingToken?= null
@@ -37,22 +40,19 @@ class enterNumber:Fragment(R.layout.number_enter) {
     //Progress Dialog
     private lateinit var progressDialog: ProgressDialog
 
+     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                               savedInstanceState: Bundle?
+    ): View? {
+         phoneAuthBinding = FragmentPhoneAuthBinding.inflate(inflater, container, false)
+         return phoneAuthBinding.root
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val view = inflater!!.inflate(R.layout.number_enter, container,false)
-//        return view
-//    }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = NumberEnterBinding.bind(view)
-        enterNumberEnterBinding = binding
+        phoneAuthBinding = FragmentPhoneAuthBinding.bind(view)
 
-
+        loginViewModel = (activity as LoginActivity).loginViewModel
         firebaseAuth = FirebaseAuth.getInstance()
 
         progressDialog = ProgressDialog(activity)
@@ -86,8 +86,8 @@ class enterNumber:Fragment(R.layout.number_enter) {
             }
         }
 
-        binding.phoneContinueBtn.setOnClickListener {
-            val phone = binding.phoneEt.text.toString().trim()
+        phoneAuthBinding.phoneContinueBtn.setOnClickListener {
+            val phone = phoneAuthBinding.phoneEt.text.toString().trim()
 
             if(TextUtils.isEmpty(phone)){
                 Toast.makeText(activity,"Please Enter Phone Number", Toast.LENGTH_SHORT).show()
@@ -97,9 +97,9 @@ class enterNumber:Fragment(R.layout.number_enter) {
             }
         }
 
-        binding.resendcodeTv.setOnClickListener {
+        phoneAuthBinding.resendcodeTv.setOnClickListener {
 
-            val phone = binding.phoneEt.text.toString().trim()
+            val phone = phoneAuthBinding.phoneEt.text.toString().trim()
 
             if(TextUtils.isEmpty(phone)){
                 Toast.makeText(activity,"Please Enter Phone Number", Toast.LENGTH_SHORT).show()
@@ -110,9 +110,9 @@ class enterNumber:Fragment(R.layout.number_enter) {
 
         }
 
-        binding.codesubmitBtn.setOnClickListener {
+        phoneAuthBinding.codesubmitBtn.setOnClickListener {
 
-            val code = binding.codeEt.text.toString().trim()
+            val code = phoneAuthBinding.codeEt.text.toString().trim()
 
             if(TextUtils.isEmpty(code)){
                 Toast.makeText(activity,"Please Enter Verification Code", Toast.LENGTH_SHORT).show()
@@ -175,9 +175,17 @@ class enterNumber:Fragment(R.layout.number_enter) {
                 val phone = firebaseAuth.currentUser!!.phoneNumber
                 Toast.makeText(activity, "Logged in as $phone", Toast.LENGTH_SHORT).show()
 
-                requireView().findNavController().navigate(R.id.action_enterNumber_to_VeriifyOtp)
-            //This is causing the activity to finish
-            //activity?.finish()
+                Log.e("LoginAc","UserProfile ${loginViewModel.currentProfile.value}")
+                if(loginViewModel.currentProfile.value==null)
+                {
+                    requireView().findNavController().navigate(R.id.action_phoneAuth_to_createProfileFragment)
+                }
+                else
+                {
+                    val intent = Intent(activity as LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                }
             }
             .addOnFailureListener { e->
                 //Login Failed
@@ -187,8 +195,9 @@ class enterNumber:Fragment(R.layout.number_enter) {
     }
 
     override fun onDestroyView() {
-        enterNumberEnterBinding= null
         super.onDestroyView()
     }
 
 }
+
+

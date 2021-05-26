@@ -1,4 +1,4 @@
-package com.buddie.presentation.activities
+package com.buddie.presentation.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.activities.getStarted">
+    tools:context=".presentation.fragments.getStarted">
 
     <Button
         android:id="@+id/startBtn"
