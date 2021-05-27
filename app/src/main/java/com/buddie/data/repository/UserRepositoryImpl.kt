@@ -13,20 +13,20 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(private var firebaseSource: FirebaseSource) :
 	UserRepository {
 	
-	override suspend fun saveUserProfile(userProfile: UserProfile): Result<UserProfile> =
+	override suspend fun saveUserProfile(userProfile: UserProfile): Result<UserProfile?> =
 		taskToResource(firebaseSource.saveUserProfile(userProfile))
 	
-	override suspend fun getUser(): Result<UserProfile> = taskToResource(firebaseSource.getUser())
+	override suspend fun getUser(): Result<UserProfile?> = taskToResource(firebaseSource.getUser())
 	
-	private suspend fun taskToResource(task: Task<DocumentSnapshot>): Result<UserProfile> {
-		lateinit var result: Result<UserProfile>
+	private suspend fun taskToResource(task: Task<DocumentSnapshot>): Result<UserProfile?> {
+		lateinit var result: Result<UserProfile?>
 		
 		task.addOnSuccessListener { document ->
 			val userProfile: UserProfile? = document.toObject<UserProfile>()
 			result = if (userProfile != null) {
 				Result.Success(userProfile)
 			} else {
-				Result.Error("Cannot convert task to user")
+				Result.Success(null)
 			}
 		}.addOnFailureListener { exception ->
 			exception.printStackTrace()

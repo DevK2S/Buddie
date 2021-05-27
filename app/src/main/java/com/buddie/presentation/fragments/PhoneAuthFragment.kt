@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.buddie.R
+import com.buddie.data.util.Result
 import com.buddie.databinding.FragmentPhoneAuthBinding
-import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseException
@@ -25,6 +25,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 
 class PhoneAuthFragment : Fragment() {
+	private val TAG = PhoneAuthFragment::class.simpleName
 	
 	private lateinit var phoneAuthBinding: FragmentPhoneAuthBinding
 	private val profileViewModel: ProfileViewModel by activityViewModels()
@@ -34,7 +35,6 @@ class PhoneAuthFragment : Fragment() {
 	private var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
 	private var mVerificationId: String? = null
 	private lateinit var firebaseAuth: FirebaseAuth
-	private val TAG = "MAIN_TAG"
 	
 	//Progress Dialog
 	private lateinit var progressDialog: ProgressDialog
@@ -67,8 +67,7 @@ class PhoneAuthFragment : Fragment() {
 			}
 			
 			override fun onCodeSent(
-				verificationId: String,
-				token: PhoneAuthProvider.ForceResendingToken
+				verificationId: String, token: PhoneAuthProvider.ForceResendingToken
 			) {
 				super.onCodeSent(verificationId, token)
 				Log.d(TAG, "onCodeSent: $verificationId")
@@ -127,8 +126,7 @@ class PhoneAuthFragment : Fragment() {
 	
 	
 	private fun resendVerificationCode(
-		phone: String,
-		token: PhoneAuthProvider.ForceResendingToken?
+		phone: String, token: PhoneAuthProvider.ForceResendingToken?
 	) {
 		progressDialog.setMessage("Resending Code . . .")
 		progressDialog.show()
@@ -145,27 +143,41 @@ class PhoneAuthFragment : Fragment() {
 		val credential = PhoneAuthProvider.getCredential(verificationId, code)
 		signInWithPhoneAuthCredential(credential)
 	}
- 
+	
 	private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
 		progressDialog.setMessage("Logging In . .")
 		
 		firebaseAuth.signInWithCredential(credential).addOnSuccessListener { //Login Success
-				progressDialog.dismiss()
-				val phone = firebaseAuth.currentUser!!.phoneNumber
-				Toast.makeText(activity, "Logged in as $phone", Toast.LENGTH_SHORT).show()
-				
-				Log.e("LoginAc", "UserProfile ${profileViewModel.currentUser.value}")
-				if (profileViewModel.currentUser.value == null) {
-					requireView().findNavController()
-						.navigate(R.id.action_phoneAuth_to_createProfileFragment)
-				} else {
-					val intent = Intent(activity as LoginActivity, MainActivity::class.java)
-					startActivity(intent)
-					activity?.finish()
+			progressDialog.dismiss()
+			val phone = firebaseAuth.currentUser!!.phoneNumber
+			Toast.makeText(activity, "Logged in as $phone", Toast.LENGTH_SHORT).show()
+			
+			profileViewModel.getUser()
+			
+			profileViewModel.currentUser.observe(viewLifecycleOwner, { result ->
+				when (result) {
+					is Result.Success -> {
+						Log.e(TAG, "UserProfile ${profileViewModel.currentUser.value?.data}")
+						if (result.data == null) {
+							requireView().findNavController()
+								.navigate(R.id.action_phoneAuth_to_createProfileFragment)
+						} else {
+							val intent = Intent(requireActivity(), MainActivity::class.java)
+							startActivity(intent)
+							requireActivity().finish()
+						}
+					}
+					is Result.Loading -> {
+					
+					}
+					is Result.Error -> {
+						Log.e(TAG, "UserProfile ${profileViewModel.currentUser.value}")
+					}
 				}
-			}.addOnFailureListener { e -> //Login Failed
-				progressDialog.dismiss()
-				Toast.makeText(activity, "${e.message}", Toast.LENGTH_SHORT).show()
-			}
+			})
+		}.addOnFailureListener { e -> //Login Failed
+			progressDialog.dismiss()
+			Toast.makeText(activity, "${e.message}", Toast.LENGTH_SHORT).show()
+		}
 	}
 }

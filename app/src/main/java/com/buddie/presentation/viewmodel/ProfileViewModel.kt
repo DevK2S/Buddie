@@ -15,15 +15,15 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(private val userRepository: UserRepository) :
 	ViewModel() {
 	
-	private val mCurrentUser: MutableLiveData<Result<UserProfile>> = MutableLiveData()
-	val currentUser: LiveData<Result<UserProfile>>
+	private val mCurrentUser: MutableLiveData<Result<UserProfile?>> = MutableLiveData()
+	val currentUser: LiveData<Result<UserProfile?>>
 		get() = mCurrentUser
 	
 	fun saveUserProfile(userProfile: UserProfile) {
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result: Result<UserProfile> = userRepository.saveUserProfile(userProfile)
+			val result = userRepository.saveUserProfile(userProfile)
 			mCurrentUser.postValue(result)
 		}
 	}
@@ -32,7 +32,7 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result: Result<UserProfile> = userRepository.getUser()
+			val result = userRepository.getUser()
 			mCurrentUser.postValue(result)
 		}
 	}
