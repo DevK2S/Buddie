@@ -1,7 +1,7 @@
 <resources>
-	<string name="app_name">Buddie</string>
-	<string name="getting_started">LOGIN</string>
-	<string name="next">next</string>
-	<string name="resend_code">Resend Code</string>
-	<string name="hello_blank_fragment">Hello blank fragment</string>>
+    <string name="app_name">Buddie</string>
+    <string name="login">LOGIN</string>
+    <string name="next">next</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>>
 </resources>

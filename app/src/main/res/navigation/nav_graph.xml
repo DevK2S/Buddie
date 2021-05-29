@@ -11,30 +11,40 @@
 		android:label="get_started_page"
 		tools:layout="@layout/fragment_get_started">
 		<action
-			android:id="@+id/action_getStarted_to_enterNumber"
-			app:destination="@id/phoneAuth" />
+			android:id="@+id/action_getStarted_to_enterNumberFragment"
+			app:destination="@id/enterNumberFragment" />
 	</fragment>
-	
-	<fragment
-		android:id="@+id/phoneAuth"
-		android:name="com.buddie.presentation.fragments.PhoneAuthFragment"
-		android:label="number_enter"
-		tools:layout="@layout/fragment_phone_auth">
-		
-		<action
-			android:id="@+id/action_phoneAuth_to_createProfileFragment"
-			app:destination="@id/createProfileFragment" />
-	</fragment>
-	
+
 	<fragment
 		android:id="@+id/createProfileFragment"
 		android:name="com.buddie.presentation.fragments.CreateProfileFragment"
 		android:label="fragment_create_profile"
 		tools:layout="@layout/fragment_create_profile" />
-	
+
 	<activity
 		android:id="@+id/hilt_MainActivity"
 		android:name="com.buddie.presentation.activities.Hilt_MainActivity"
 		android:label="Hilt_MainActivity" />
+	<fragment
+		android:id="@+id/enterNumberFragment"
+		android:name="com.buddie.presentation.fragments.EnterNumberFragment"
+		android:label="EnterNumberFragment"
+		tools:layout="@layout/fragment_enter_number">
+		<action
+			android:id="@+id/action_enterNumberFragment_to_enterOtpFragment"
+			app:destination="@id/enterOtpFragment" />
+		<action
+			android:id="@+id/action_enterNumberFragment_to_createProfileFragment"
+			app:destination="@id/createProfileFragment" />
+	</fragment>
+	<fragment
+		android:id="@+id/enterOtpFragment"
+		android:name="com.buddie.presentation.fragments.EnterOtpFragment"
+		android:label="EnterOtpFragment"
+		tools:layout="@layout/fragment_enter_otp">
+		<action
+			android:id="@+id/action_enterOtpFragment_to_createProfileFragment"
+			app:destination="@id/createProfileFragment" />
+	</fragment>
 
 </navigation>

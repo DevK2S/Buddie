@@ -24,7 +24,7 @@ class GetStartedFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 		
 		binding.startBtn.setOnClickListener {
-			view.findNavController().navigate(R.id.action_getStarted_to_enterNumber)
+			view.findNavController().navigate(R.id.action_getStarted_to_enterNumberFragment)
 		}
 	}
 }
