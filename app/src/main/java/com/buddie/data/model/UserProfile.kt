@@ -2,7 +2,6 @@ package com.buddie.data.model
 
 import java.io.Serializable
 
-
 data class UserProfile(
 	var name: String? = null,
 	var dob: String? = null,

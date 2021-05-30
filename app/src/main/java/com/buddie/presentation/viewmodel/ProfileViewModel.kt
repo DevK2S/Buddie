@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.buddie.data.model.UserProfile
 import com.buddie.data.util.Result
 import com.buddie.domain.repository.UserRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,15 +18,15 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 	private val mCurrentUser: MutableLiveData<Result<UserProfile?>> = MutableLiveData()
 	val currentUser: LiveData<Result<UserProfile?>>
 		get() = mCurrentUser
-
-	lateinit var phNumber:String
-
-	var forceResendingToken : PhoneAuthProvider.ForceResendingToken?= null
-
-	var verificationId: String? = null
-
-	lateinit var firebaseAuth: FirebaseAuth
-
+	
+	private val mPhoneNumber: MutableLiveData<String> = MutableLiveData()
+	val phoneNumber: LiveData<String>
+		get() = mPhoneNumber
+	
+	private val mOtp: MutableLiveData<String> = MutableLiveData()
+	val otp: LiveData<String>
+		get() = mOtp
+	
 	fun saveUserProfile(userProfile: UserProfile) {
 		mCurrentUser.postValue(Result.Loading())
 		
@@ -45,6 +43,14 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 			val result = userRepository.getUser()
 			mCurrentUser.postValue(result)
 		}
+	}
+	
+	fun setPhoneNumber(phoneNumber: String) {
+		mPhoneNumber.postValue(phoneNumber)
+	}
+	
+	fun setOtp(otp: String) {
+		mOtp.postValue(otp)
 	}
 }
 

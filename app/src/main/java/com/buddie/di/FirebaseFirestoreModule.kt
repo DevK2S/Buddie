@@ -17,8 +17,7 @@ class FirebaseFirestoreModule {
 	@Provides
 	@Singleton
 	fun providesFirebaseSource(
-		firebaseAuth: FirebaseAuth,
-		firebaseFirestore: FirebaseFirestore
+		firebaseAuth: FirebaseAuth, firebaseFirestore: FirebaseFirestore
 	): FirebaseSource {
 		return FirebaseSourceImpl(firebaseAuth, firebaseFirestore)
 	}

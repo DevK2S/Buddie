@@ -15,15 +15,18 @@ class FirebaseSourceImpl @Inject constructor(
 	
 	override suspend fun saveUserProfile(userProfile: UserProfile): Task<DocumentSnapshot> {
 		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
-			.document(firebaseAuth.currentUser!!.uid).collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
-			.document(Constants.FIRESTORE_USERS_PROFILE).set(userProfile)
+			.document(firebaseAuth.currentUser!!.uid)
+			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
+			.document(Constants.FIRESTORE_USERS_PROFILE)
+			.set(userProfile)
 		
 		return getUser()
 	}
 	
 	override suspend fun getUser(): Task<DocumentSnapshot> =
 		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
-			.document(firebaseAuth.currentUser!!.uid).collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
-			.document(Constants.FIRESTORE_USERS_PROFILE).get()
-	
+			.document(firebaseAuth.currentUser!!.uid)
+			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
+			.document(Constants.FIRESTORE_USERS_PROFILE)
+			.get()
 }

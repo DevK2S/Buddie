@@ -32,14 +32,14 @@
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:paddingTop="10dp"/>
-
+    
             <EditText
                 android:id="@+id/phoneEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="#fff"
-                android:hint="+91 XXXXX XXXXX"
+                android:hint="XXXXX XXXXX"
                 android:inputType="phone"
                 android:padding="10dp"
                 android:textAlignment="center"

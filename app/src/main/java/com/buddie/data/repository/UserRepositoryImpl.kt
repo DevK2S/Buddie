@@ -29,12 +29,10 @@ class UserRepositoryImpl @Inject constructor(private var firebaseSource: Firebas
 				Result.Success(null)
 			}
 		}.addOnFailureListener { exception ->
-			exception.printStackTrace()
-			result = if (exception.message != null) {
-				Result.Error(exception.message!!)
-			} else {
-				Result.Error("Cannot convert task to user")
-			}
+			result = Result.Error(
+				exception = exception,
+				message = exception.message ?: "Cannot convert task to result"
+			)
 		}.await()
 		
 		return result

@@ -3,28 +3,18 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/navigation"
-	app:startDestination="@id/getStarted">
+	app:startDestination="@id/getStartedFragment">
 	
 	<fragment
-		android:id="@+id/getStarted"
+		android:id="@+id/getStartedFragment"
 		android:name="com.buddie.presentation.fragments.GetStartedFragment"
 		android:label="get_started_page"
 		tools:layout="@layout/fragment_get_started">
 		<action
-			android:id="@+id/action_getStarted_to_enterNumberFragment"
+			android:id="@+id/action_getStartedFragment_to_enterNumberFragment"
 			app:destination="@id/enterNumberFragment" />
 	</fragment>
-
-	<fragment
-		android:id="@+id/createProfileFragment"
-		android:name="com.buddie.presentation.fragments.CreateProfileFragment"
-		android:label="fragment_create_profile"
-		tools:layout="@layout/fragment_create_profile" />
-
-	<activity
-		android:id="@+id/hilt_MainActivity"
-		android:name="com.buddie.presentation.activities.Hilt_MainActivity"
-		android:label="Hilt_MainActivity" />
+	
 	<fragment
 		android:id="@+id/enterNumberFragment"
 		android:name="com.buddie.presentation.fragments.EnterNumberFragment"
@@ -32,19 +22,33 @@
 		tools:layout="@layout/fragment_enter_number">
 		<action
 			android:id="@+id/action_enterNumberFragment_to_enterOtpFragment"
-			app:destination="@id/enterOtpFragment" />
+			app:destination="@id/enterOtpFragment"/>
 		<action
 			android:id="@+id/action_enterNumberFragment_to_createProfileFragment"
 			app:destination="@id/createProfileFragment" />
 	</fragment>
+	
 	<fragment
 		android:id="@+id/enterOtpFragment"
 		android:name="com.buddie.presentation.fragments.EnterOtpFragment"
 		android:label="EnterOtpFragment"
 		tools:layout="@layout/fragment_enter_otp">
+		<argument android:name="verificationId" app:argType="string" />
+		<argument android:name="forceResendingToken" app:argType="com.google.firebase.auth.PhoneAuthProvider$ForceResendingToken" />
 		<action
 			android:id="@+id/action_enterOtpFragment_to_createProfileFragment"
 			app:destination="@id/createProfileFragment" />
 	</fragment>
+	
+	<fragment
+		android:id="@+id/createProfileFragment"
+		android:name="com.buddie.presentation.fragments.CreateProfileFragment"
+		android:label="fragment_create_profile"
+		tools:layout="@layout/fragment_create_profile" />
+	
+	<activity
+		android:id="@+id/hilt_MainActivity"
+		android:name="com.buddie.presentation.activities.Hilt_MainActivity"
+		android:label="Hilt_MainActivity" />
 
 </navigation>
