@@ -8,17 +8,22 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private var firebaseSource: FirebaseSource) :
 	UserRepository {
 	
 	override suspend fun saveUserProfile(userProfile: UserProfile): Result<UserProfile?> =
-		taskToResource(firebaseSource.saveUserProfile(userProfile))
+		userProfileTaskToResource(firebaseSource.saveUserProfile(userProfile))
 	
-	override suspend fun getUser(): Result<UserProfile?> = taskToResource(firebaseSource.getUser())
+	override suspend fun getUser(): Result<UserProfile?> =
+		userProfileTaskToResource(firebaseSource.getUser())
 	
-	private suspend fun taskToResource(task: Task<DocumentSnapshot>): Result<UserProfile?> {
+	override suspend fun checkUserExists(): Result<Boolean> =
+		booleanTaskToResource(firebaseSource.getUser())
+	
+	private suspend fun userProfileTaskToResource(task: Task<DocumentSnapshot>): Result<UserProfile?> {
 		lateinit var result: Result<UserProfile?>
 		
 		task.addOnSuccessListener { document ->
@@ -27,6 +32,25 @@ class UserRepositoryImpl @Inject constructor(private var firebaseSource: Firebas
 				Result.Success(userProfile)
 			} else {
 				Result.Success(null)
+			}
+		}.addOnFailureListener { exception ->
+			result = Result.Error(
+				exception = exception,
+				message = exception.message ?: "Cannot convert task to result"
+			)
+		}.await()
+		
+		return result
+	}
+	
+	private suspend fun booleanTaskToResource(task: Task<DocumentSnapshot>): Result<Boolean> {
+		lateinit var result: Result<Boolean>
+		
+		task.addOnSuccessListener { document ->
+			result = if (document.exists()) {
+				Result.Success(true)
+			} else {
+				Result.Success(false)
 			}
 		}.addOnFailureListener { exception ->
 			result = Result.Error(

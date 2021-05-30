@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.buddie.data.model.UserProfile
 import com.buddie.databinding.FragmentCreateProfileBinding
 import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
+import com.buddie.presentation.viewmodel.LoginViewModel
 import com.buddie.presentation.viewmodel.ProfileViewModel
 
 class CreateProfileFragment : BaseFragment() {
@@ -34,6 +34,7 @@ class CreateProfileFragment : BaseFragment() {
 			profileViewModel.saveUserProfile(
 				UserProfile(
 					binding.firstName.text.toString(),
+					firebaseAuth.currentUser?.phoneNumber,
 					"23/02/2000",
 					"Male",
 					"25-30",

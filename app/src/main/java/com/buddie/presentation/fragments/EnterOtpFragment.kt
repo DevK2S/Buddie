@@ -16,7 +16,7 @@ import com.buddie.databinding.FragmentEnterOtpBinding
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
-import com.buddie.presentation.viewmodel.ProfileViewModel
+import com.buddie.presentation.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -34,7 +34,7 @@ class EnterOtpFragment : BaseFragment() {
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 	
-	private val profileViewModel: ProfileViewModel by activityViewModels()
+	private val loginViewModel: LoginViewModel by activityViewModels()
 	private val args: EnterOtpFragmentArgs by navArgs()
 	
 	override fun onCreateView(
@@ -55,10 +55,11 @@ class EnterOtpFragment : BaseFragment() {
 		initOnClickListeners()
 		
 		enterOtpBinding.dispNum.text =
-			"Please Enter the OTP we've sent on ${profileViewModel.phoneNumber.value}"
+			"Please Enter the OTP we've sent on ${loginViewModel.phoneNumber.value}"
 		
-		profileViewModel.otp.observe(viewLifecycleOwner, { otp ->
-			if (enterOtpBinding.codeEt.text.isNullOrBlank()) {
+		loginViewModel.otp.observe(viewLifecycleOwner, { otp ->
+			val codeEt = enterOtpBinding.codeEt.text
+			if (codeEt.isNullOrBlank() || codeEt.toString() != otp) {
 				enterOtpBinding.codeEt.setText(otp)
 			}
 		})
@@ -71,7 +72,7 @@ class EnterOtpFragment : BaseFragment() {
 				
 				Timber.d(phoneAuthCredential.smsCode)
 				
-				phoneAuthCredential.smsCode?.let { profileViewModel.setOtp(it) }
+				phoneAuthCredential.smsCode?.let { loginViewModel.setOtp(it) }
 			}
 			
 			override fun onVerificationFailed(exception: FirebaseException) {
@@ -105,7 +106,7 @@ class EnterOtpFragment : BaseFragment() {
 	
 	private fun initResendCodeBtnOnClickListener() {
 		enterOtpBinding.resendcodeTv.setOnClickListener {
-			profileViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
+			loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
 				resendVerificationCode(phoneNumber, forceResendingToken)
 			})
 		}
@@ -116,9 +117,9 @@ class EnterOtpFragment : BaseFragment() {
 			progressDialog.show()
 			
 			val vCode = enterOtpBinding.codeEt.text.toString().trim()
-			profileViewModel.setOtp(vCode)
+			loginViewModel.setOtp(vCode)
 			
-			profileViewModel.otp.observeOnce(viewLifecycleOwner, { otp ->
+			loginViewModel.otp.observeOnce(viewLifecycleOwner, { otp ->
 				when {
 					TextUtils.isEmpty(otp) -> {
 						progressDialog.cancel()
@@ -171,28 +172,32 @@ class EnterOtpFragment : BaseFragment() {
 		firebaseAuth.signInWithCredential(credential).addOnSuccessListener {
 			Timber.d("Login Success")
 			
-			profileViewModel.getUser()
+			loginViewModel.checkUserExists()
 			
-			profileViewModel.currentUser.observe(viewLifecycleOwner, { result ->
+			loginViewModel.userExists.observe(viewLifecycleOwner, { result ->
 				when (result) {
 					is Result.Success -> {
 						progressDialog.cancel()
 						
 						Toast.makeText(
 							requireContext(),
-							"Logged in as ${profileViewModel.phoneNumber.value}",
+							"Logged in as ${loginViewModel.phoneNumber.value}",
 							Toast.LENGTH_SHORT
 						).show()
 						
-						Timber.d("${profileViewModel.currentUser.value?.data}")
+						Timber.d("User Exists returned ${loginViewModel.userExists.value?.data}")
 						
-						if (result.data == null) {
-							requireView().findNavController()
-								.navigate(R.id.action_enterOtpFragment_to_createProfileFragment)
-						} else {
+						if (result.data == true) {
 							val intent = Intent(requireActivity(), MainActivity::class.java)
 							startActivity(intent)
+							loginViewModel.setOtp("")
+							
 							requireActivity().finish()
+						} else {
+							loginViewModel.setOtp("")
+							
+							requireView().findNavController()
+								.navigate(R.id.action_enterOtpFragment_to_createProfileFragment)
 						}
 					}
 					
@@ -201,6 +206,8 @@ class EnterOtpFragment : BaseFragment() {
 					
 					is Result.Error -> {
 						progressDialog.cancel()
+						
+						loginViewModel.setOtp("")
 						
 						result.exception?.let { exception -> handleLoginException(exception) }
 					}

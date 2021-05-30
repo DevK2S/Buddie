@@ -16,7 +16,7 @@ import androidx.navigation.findNavController
 import com.buddie.databinding.FragmentEnterNumberBinding
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
-import com.buddie.presentation.viewmodel.ProfileViewModel
+import com.buddie.presentation.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
@@ -38,7 +38,7 @@ class EnterNumberFragment : BaseFragment() {
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 	
-	private val profileViewModel: ProfileViewModel by activityViewModels()
+	private val loginViewModel: LoginViewModel by activityViewModels()
 	
 	private val phoneNumberHintResult =
 		registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
@@ -46,7 +46,7 @@ class EnterNumberFragment : BaseFragment() {
 				val credential: Credential? = result.data?.getParcelableExtra(Credential.EXTRA_KEY)
 				if (credential?.id != null) {
 					val phoneNumber = credential.id
-					profileViewModel.setPhoneNumber(phoneNumber)
+					loginViewModel.setPhoneNumber(phoneNumber)
 					enterNumberBinding.phoneEt.setText(phoneNumber)
 					
 					startPhoneNumberVerification()
@@ -76,7 +76,7 @@ class EnterNumberFragment : BaseFragment() {
 			override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
 				Timber.d(phoneAuthCredential.smsCode)
 				
-				phoneAuthCredential.smsCode?.let { profileViewModel.setOtp(it) }
+				phoneAuthCredential.smsCode?.let { loginViewModel.setOtp(it) }
 			}
 			
 			override fun onVerificationFailed(exception: FirebaseException) {
@@ -123,7 +123,7 @@ class EnterNumberFragment : BaseFragment() {
 				phone = "+91$phone"
 				
 				if (Patterns.PHONE.matcher(phone).matches()) {
-					profileViewModel.setPhoneNumber(phone)
+					loginViewModel.setPhoneNumber(phone)
 					
 					startPhoneNumberVerification()
 				} else {
@@ -147,10 +147,10 @@ class EnterNumberFragment : BaseFragment() {
 	
 	private fun startPhoneNumberVerification() {
 		if (this::phoneAuthCallbacks.isInitialized) {
-			profileViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
+			loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
 				val options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
 					.setPhoneNumber(phoneNumber)
-					.setTimeout(30L, TimeUnit.SECONDS)
+					.setTimeout(60L, TimeUnit.SECONDS)
 					.setActivity(this.requireActivity())
 					.setCallbacks(phoneAuthCallbacks)
 					.build()

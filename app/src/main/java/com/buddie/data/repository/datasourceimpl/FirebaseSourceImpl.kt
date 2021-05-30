@@ -29,4 +29,5 @@ class FirebaseSourceImpl @Inject constructor(
 			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
 			.document(Constants.FIRESTORE_USERS_PROFILE)
 			.get()
+	
 }

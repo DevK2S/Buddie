@@ -19,14 +19,6 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 	val currentUser: LiveData<Result<UserProfile?>>
 		get() = mCurrentUser
 	
-	private val mPhoneNumber: MutableLiveData<String> = MutableLiveData()
-	val phoneNumber: LiveData<String>
-		get() = mPhoneNumber
-	
-	private val mOtp: MutableLiveData<String> = MutableLiveData()
-	val otp: LiveData<String>
-		get() = mOtp
-	
 	fun saveUserProfile(userProfile: UserProfile) {
 		mCurrentUser.postValue(Result.Loading())
 		
@@ -44,14 +36,4 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 			mCurrentUser.postValue(result)
 		}
 	}
-	
-	fun setPhoneNumber(phoneNumber: String) {
-		mPhoneNumber.postValue(phoneNumber)
-	}
-	
-	fun setOtp(otp: String) {
-		mOtp.postValue(otp)
-	}
 }
-
-

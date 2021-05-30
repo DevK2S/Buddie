@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 open class BaseFragment: Fragment() {
 	
 	protected lateinit var firebaseAuth: FirebaseAuth
+	
 	protected lateinit var progressDialog: AlertDialog
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -17,10 +18,10 @@ open class BaseFragment: Fragment() {
 		
 		firebaseAuth = (activity as BaseActivity).firebaseAuth
 		
-		initProgressBar()
+		initProgressDialog()
 	}
 	
-	private fun initProgressBar() {
+	private fun initProgressDialog() {
 		val pb = AlertDialog.Builder(requireContext(), R.style.TransparentProgressDialog)
 		pb.setView(R.layout.progress_bar)
 		
