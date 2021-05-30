@@ -2,17 +2,10 @@ package com.buddie.presentation.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.buddie.databinding.ActivityLoginBinding
-import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import com.buddie.presentation.base.BaseActivity
 
-@AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
-	
-	@Inject
-	lateinit var firebaseAuth: FirebaseAuth
+class LoginActivity : BaseActivity() {
 	
 	private lateinit var binding: ActivityLoginBinding
 	
@@ -26,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
 	}
 	
 	private fun checkUserLoggedIn() {
-		if (firebaseAuth.currentUser != null) {
+		if (getCurrentUserUid() != null) {
 			val intent = Intent(this@LoginActivity, MainActivity::class.java)
 			startActivity(intent)
 			finish()

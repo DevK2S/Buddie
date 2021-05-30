@@ -1,7 +1,6 @@
 package com.buddie.presentation.fragments
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Patterns
@@ -12,12 +11,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.buddie.R
 import com.buddie.databinding.FragmentEnterNumberBinding
-import com.buddie.presentation.activities.LoginActivity
+import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
 import com.buddie.presentation.viewmodel.ProfileViewModel
 import com.google.android.gms.auth.api.credentials.Credential
@@ -33,17 +30,13 @@ import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EnterNumberFragment : Fragment() {
-	
-	private lateinit var firebaseAuth: FirebaseAuth
+class EnterNumberFragment : BaseFragment() {
 	
 	private lateinit var enterNumberBinding: FragmentEnterNumberBinding
 	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-	
-	private lateinit var progressDialog: AlertDialog
 	
 	private val profileViewModel: ProfileViewModel by activityViewModels()
 	
@@ -71,11 +64,7 @@ class EnterNumberFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		firebaseAuth = (activity as LoginActivity).firebaseAuth
-		
 		initPhoneAuthCallbacks()
-		
-		initProgressBar()
 		
 		initOnClickListeners()
 		
@@ -119,14 +108,6 @@ class EnterNumberFragment : Fragment() {
 				requireView().findNavController().navigate(navigate)
 			}
 		}
-	}
-	
-	private fun initProgressBar() {
-		val pb = AlertDialog.Builder(requireContext(), R.style.TransparentProgressDialog)
-		pb.setView(R.layout.progress_bar)
-		
-		progressDialog = pb.create()
-		progressDialog.setCanceledOnTouchOutside(false)
 	}
 	
 	private fun initOnClickListeners() {

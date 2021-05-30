@@ -11,9 +11,10 @@ import com.buddie.data.model.UserProfile
 import com.buddie.databinding.FragmentCreateProfileBinding
 import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
+import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.viewmodel.ProfileViewModel
 
-class CreateProfileFragment : Fragment() {
+class CreateProfileFragment : BaseFragment() {
 	
 	private lateinit var binding: FragmentCreateProfileBinding
 	

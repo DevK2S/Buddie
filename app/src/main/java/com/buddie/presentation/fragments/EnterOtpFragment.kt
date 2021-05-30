@@ -1,6 +1,5 @@
 package com.buddie.presentation.fragments
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -8,20 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.buddie.R
 import com.buddie.data.util.Result
 import com.buddie.databinding.FragmentEnterOtpBinding
-import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
+import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
 import com.buddie.presentation.viewmodel.ProfileViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
@@ -29,17 +26,13 @@ import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EnterOtpFragment : Fragment() {
-	
-	private lateinit var firebaseAuth: FirebaseAuth
+class EnterOtpFragment : BaseFragment() {
 	
 	private lateinit var enterOtpBinding: FragmentEnterOtpBinding
 	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-	
-	private lateinit var progressDialog: AlertDialog
 	
 	private val profileViewModel: ProfileViewModel by activityViewModels()
 	private val args: EnterOtpFragmentArgs by navArgs()
@@ -54,14 +47,10 @@ class EnterOtpFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		firebaseAuth = (activity as LoginActivity).firebaseAuth
-		
 		verificationId = args.verificationId
 		forceResendingToken = args.forceResendingToken
 		
 		initPhoneAuthCallbacks()
-		
-		initProgressBar()
 		
 		initOnClickListeners()
 		
@@ -107,14 +96,6 @@ class EnterOtpFragment : Fragment() {
 					.show()
 			}
 		}
-	}
-	
-	private fun initProgressBar() {
-		val pb = AlertDialog.Builder(requireContext(), R.style.TransparentProgressDialog)
-		pb.setView(R.layout.progress_bar)
-		
-		progressDialog = pb.create()
-		progressDialog.setCanceledOnTouchOutside(false)
 	}
 	
 	private fun initOnClickListeners() {

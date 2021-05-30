@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.buddie.R
 import com.buddie.databinding.FragmentGetStartedBinding
+import com.buddie.presentation.base.BaseFragment
 
-class GetStartedFragment : Fragment() {
+class GetStartedFragment : BaseFragment() {
 	
 	private lateinit var binding: FragmentGetStartedBinding
 	

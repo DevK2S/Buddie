@@ -2,19 +2,10 @@ package com.buddie.presentation.activities
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.buddie.databinding.ActivityMainBinding
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import com.buddie.presentation.base.BaseActivity
 
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-	
-	@Inject
-	lateinit var firebaseAuth: FirebaseAuth
+class MainActivity : BaseActivity() {
 	
 	private lateinit var binding: ActivityMainBinding
 	
