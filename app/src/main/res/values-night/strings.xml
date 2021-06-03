@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Gender">GENDER</string>
+    <string name="Male">MALE</string>
+    <string name="Female">FEMALE</string>
+    <string name="DOB">D.O.B</string>
+    <string name="AgeIn">AGE INTEREST</string>
+    <string name="Interest">Interested In</string>
+    <string name="Loc">Location</string>
+    <string name="login">LOGIN</string>
+</resources>

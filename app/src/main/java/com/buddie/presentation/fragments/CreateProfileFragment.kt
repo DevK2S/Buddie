@@ -11,7 +11,6 @@ import com.buddie.databinding.FragmentCreateProfileBinding
 import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
-import com.buddie.presentation.viewmodel.LoginViewModel
 import com.buddie.presentation.viewmodel.ProfileViewModel
 
 class CreateProfileFragment : BaseFragment() {
@@ -29,11 +28,20 @@ class CreateProfileFragment : BaseFragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		val data: MutableList<String> = ArrayList()
+		data.add("Male")
+		data.add("Female")
+		data.add("China")
+		data.add("Pakis")
+		data.add("Austr")
+
+		binding.scrollGender.addItems(data,2)
 		
-		binding.createButton.setOnClickListener {
+		binding.btnNext.setOnClickListener {
 			profileViewModel.saveUserProfile(
 				UserProfile(
-					binding.firstName.text.toString(),
+					binding.editTextFirstName.text.toString(),
 					firebaseAuth.currentUser?.phoneNumber,
 					"23/02/2000",
 					"Male",

@@ -1,5 +1,6 @@
 package com.buddie.di
 
+import com.buddie.data.repository.datasource.FirebaseFirestoreSource
 import com.buddie.data.repository.datasource.FirebaseSource
 import com.buddie.data.repository.datasourceimpl.FirebaseSourceImpl
 import com.google.firebase.auth.FirebaseAuth
@@ -12,13 +13,13 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class FirebaseFirestoreModule {
+class FirebaseSourceModule {
 	
 	@Provides
 	@Singleton
 	fun providesFirebaseSource(
-		firebaseAuth: FirebaseAuth, firebaseFirestore: FirebaseFirestore
+		firetoreSource: FirebaseFirestoreSource
 	): FirebaseSource {
-		return FirebaseSourceImpl(firebaseAuth, firebaseFirestore)
+		return FirebaseSourceImpl(firetoreSource)
 	}
 }

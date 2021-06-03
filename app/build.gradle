@@ -112,4 +112,7 @@ dependencies {
 
     // Loading Animations
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    implementation 'com.webianks.library:scroll-choice:1.0.1'
+
 }
