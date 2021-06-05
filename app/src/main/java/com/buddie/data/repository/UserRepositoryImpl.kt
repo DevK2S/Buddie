@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private var firebaseSource: FirebaseSource) :

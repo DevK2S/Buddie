@@ -28,15 +28,15 @@ class CreateProfileFragment : BaseFragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
+		
 		val data: MutableList<String> = ArrayList()
 		data.add("Male")
 		data.add("Female")
 		data.add("China")
 		data.add("Pakis")
 		data.add("Austr")
-
-		binding.scrollGender.addItems(data,2)
+		
+		binding.scrollGender.addItems(data, 2)
 		
 		binding.btnNext.setOnClickListener {
 			profileViewModel.saveUserProfile(
