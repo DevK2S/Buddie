@@ -17,6 +17,7 @@ import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
 import com.buddie.presentation.viewmodel.LoginViewModel
+import com.davidmiguel.numberkeyboard.NumberKeyboardListener
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -26,14 +27,16 @@ import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EnterOtpFragment : BaseFragment() {
+class EnterOtpFragment : BaseFragment(),NumberKeyboardListener {
 	
 	private lateinit var enterOtpBinding: FragmentEnterOtpBinding
 	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-	
+
+	private var amount: Int = 0
+
 	private val loginViewModel: LoginViewModel by activityViewModels()
 	private val args: EnterOtpFragmentArgs by navArgs()
 	
@@ -49,7 +52,9 @@ class EnterOtpFragment : BaseFragment() {
 		
 		verificationId = args.verificationId
 		forceResendingToken = args.forceResendingToken
-		
+
+		enterOtpBinding.numPad.setListener(this)
+
 		initPhoneAuthCallbacks()
 		
 		initOnClickListeners()
@@ -240,5 +245,31 @@ class EnterOtpFragment : BaseFragment() {
 				Toast.makeText(requireContext(), "${exception.message}", Toast.LENGTH_SHORT).show()
 			}
 		}
+	}
+
+	override fun onLeftAuxButtonClicked() {
+	}
+
+	override fun onNumberClicked(number: Int) {
+		var st=""
+		if(number == 0 && amount == 0){
+				st += "0"
+				enterOtpBinding.codeEt.setText(st)
+
+		}
+		else {
+			val newAmount = (amount * 10.0 + number).toInt()
+			if (newAmount < 1000000) {
+				amount = newAmount
+				st += amount.toString()
+				enterOtpBinding.codeEt.setText(st)
+			}
+		}
+	}
+
+	override fun onRightAuxButtonClicked() {
+		amount = (amount / 10.0).toInt()
+		var st = amount.toString()
+		enterOtpBinding.codeEt.setText(st)
 	}
 }

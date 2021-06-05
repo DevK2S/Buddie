@@ -178,18 +178,18 @@
 					android:text="@string/AgeIn"
 					android:textSize="22sp" />
 
-				<com.google.android.material.slider.RangeSlider
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginStart="24dp"
-					android:layout_marginEnd="24dp"
-					app:values="@array/initial_slider_values"
-					android:valueFrom="18.0"
-					android:valueTo="100.0"
-					android:stepSize="1.0"
+<!--				<com.google.android.material.slider.RangeSlider-->
+<!--					android:layout_width="match_parent"-->
+<!--					android:layout_height="wrap_content"-->
+<!--					android:layout_marginStart="24dp"-->
+<!--					android:layout_marginEnd="24dp"-->
+<!--					app:values="@array/initial_slider_values"-->
+<!--					android:valueFrom="18.0"-->
+<!--					android:valueTo="100.0"-->
+<!--					android:stepSize="1.0"-->
 
 
-					/>
+<!--					/>-->
 
 
             </LinearLayout>

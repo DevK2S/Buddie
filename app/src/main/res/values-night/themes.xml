@@ -16,4 +16,7 @@
     <style name="Button.Red" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/pink</item>
     </style>
+    <style name="Button.Grey" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/midnight_express</item>
+    </style>
 </resources>

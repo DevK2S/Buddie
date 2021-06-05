@@ -29,15 +29,19 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import com.davidmiguel.numberkeyboard.NumberKeyboardListener
 
-class EnterNumberFragment : BaseFragment() {
+class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	
 	private lateinit var enterNumberBinding: FragmentEnterNumberBinding
 	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-	
+
+	private var amount: Long = 0
+
+
 	private val loginViewModel: LoginViewModel by activityViewModels()
 	
 	private val phoneNumberHintResult =
@@ -63,14 +67,38 @@ class EnterNumberFragment : BaseFragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		
+
+		enterNumberBinding.numPad.setListener(this)
+
 		initPhoneAuthCallbacks()
 		
 		initOnClickListeners()
 		
 		displayPhoneNumberHints()
 	}
-	
+
+	override fun onLeftAuxButtonClicked() {
+
+	}
+
+	override fun onNumberClicked(number: Int) {
+		val newAmount = (amount * 10.0 + number).toLong()
+		if (newAmount < 10000000000) {
+			amount = newAmount
+			var st = amount.toString()
+			var ph = "+91$st"
+			enterNumberBinding.phoneEt.setText(ph)
+		}
+	}
+
+	override fun onRightAuxButtonClicked() {
+		amount = (amount / 10.0).toLong()
+		var st = amount.toString()
+		var ph = "+91$st"
+		enterNumberBinding.phoneEt.setText(ph)
+	}
+
+
 	private fun initPhoneAuthCallbacks() {
 		phoneAuthCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 			override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
@@ -120,7 +148,7 @@ class EnterNumberFragment : BaseFragment() {
 			if (TextUtils.isEmpty(phone)) {
 				Toast.makeText(activity, "Please Enter Phone Number", Toast.LENGTH_SHORT).show()
 			} else {
-				phone = "+91$phone"
+				phone = "$phone"
 				
 				if (Patterns.PHONE.matcher(phone).matches()) {
 					loginViewModel.setPhoneNumber(phone)

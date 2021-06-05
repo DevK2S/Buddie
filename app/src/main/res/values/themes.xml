@@ -16,7 +16,9 @@
     <style name="Button.Red" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/pink</item>
     </style>
-    
+    <style name="Button.Grey" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/midnight_express</item>
+    </style>
     <style name="TransparentProgressDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
