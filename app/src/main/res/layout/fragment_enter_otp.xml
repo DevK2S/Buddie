@@ -15,11 +15,11 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:text="OTP"
             android:textAlignment="center"
-            android:textSize="25sp"
-            android:layout_marginTop="30dp"
             android:textColor="#C7C8CA"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,10 +44,10 @@
                 android:id="@+id/dispNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:textColor="#C7C8CA"
                 android:layout_marginTop="25dp"
+                android:paddingTop="10dp"
                 android:textAlignment="center"
+                android:textColor="#C7C8CA"
                 android:textSize="16sp" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -55,30 +55,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXX"
                     android:background="#181A20"
-                    android:textSize="25sp"
                     android:inputType="phone"
+                    android:text="XXXXXX"
+                    android:textAlignment="center"
                     android:textColor="#C7C8CA"
-                    android:textAlignment="center"/>
+                    android:textSize="25sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            <EditText-->
-<!--                android:id="@+id/codeEt"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:background="#fff"-->
-<!--                android:hint="******"-->
-<!--                android:inputType="phone"-->
-<!--                android:padding="10dp"-->
-<!--                android:textAlignment="center"-->
-<!--                android:textColor="#000"-->
-<!--                android:textColorHint="#c5c5c5" />-->
+            <!--            <EditText-->
+            <!--                android:id="@+id/codeEt"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:background="#fff"-->
+            <!--                android:hint="******"-->
+            <!--                android:inputType="phone"-->
+            <!--                android:padding="10dp"-->
+            <!--                android:textAlignment="center"-->
+            <!--                android:textColor="#000"-->
+            <!--                android:textColorHint="#c5c5c5" />-->
 
             <TextView
                 android:id="@+id/resendcodeTv"
@@ -95,28 +96,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"
-                android:theme="@style/Button.Grey"
                 android:background="@drawable/btn_login"
-                android:text="submit" />
+                android:text="submit"
+                android:textSize="20sp"
+                android:theme="@style/Button.Grey" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="0dp"
-            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/codeLl"
-            tools:layout_editor_absoluteX="50dp">
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.davidmiguel.numberkeyboard.NumberKeyboard
-            android:id="@+id/numPad"
-            android:paddingTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            app:numberkeyboard_keyboardType="integer"
-            app:numberkeyboard_rightAuxBtnIcon="@drawable/ic_back"
-            />
+            <com.davidmiguel.numberkeyboard.NumberKeyboard
+                android:id="@+id/numPad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="20dp"
+                app:numberkeyboard_keyboardType="integer"
+                app:numberkeyboard_rightAuxBtnIcon="@drawable/ic_back" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

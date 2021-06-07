@@ -27,249 +27,259 @@ import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EnterOtpFragment : BaseFragment(),NumberKeyboardListener {
-	
-	private lateinit var enterOtpBinding: FragmentEnterOtpBinding
-	
-	private lateinit var verificationId: String
-	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
-	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
 
-	private var amount: Int = 0
+    private lateinit var enterOtpBinding: FragmentEnterOtpBinding
 
-	private val loginViewModel: LoginViewModel by activityViewModels()
-	private val args: EnterOtpFragmentArgs by navArgs()
-	
-	override fun onCreateView(
-		inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-	): View {
-		enterOtpBinding = FragmentEnterOtpBinding.inflate(inflater, container, false)
-		return enterOtpBinding.root
-	}
-	
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		
-		verificationId = args.verificationId
-		forceResendingToken = args.forceResendingToken
+    private lateinit var verificationId: String
+    private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
-		enterOtpBinding.numPad.setListener(this)
+    private var amount: Int = 0
+    private var st: String = ""
 
-		initPhoneAuthCallbacks()
-		
-		initOnClickListeners()
-		
-		enterOtpBinding.dispNum.text =
-			"Please Enter the OTP we've sent on ${loginViewModel.phoneNumber.value}"
-		
-		loginViewModel.otp.observe(viewLifecycleOwner, { otp ->
-			val codeEt = enterOtpBinding.codeEt.text
-			if (codeEt.isNullOrBlank() || codeEt.toString() != otp) {
-				enterOtpBinding.codeEt.setText(otp)
-			}
-		})
-	}
-	
-	private fun initPhoneAuthCallbacks() {
-		phoneAuthCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-			override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-				progressDialog.cancel()
-				
-				Timber.d(phoneAuthCredential.smsCode)
-				
-				phoneAuthCredential.smsCode?.let { loginViewModel.setOtp(it) }
-			}
-			
-			override fun onVerificationFailed(exception: FirebaseException) {
-				progressDialog.cancel()
-				
-				handleLoginException(exception)
-			}
-			
-			override fun onCodeSent(
-				vId: String, token: PhoneAuthProvider.ForceResendingToken
-			) {
-				super.onCodeSent(vId, token)
-				
-				Timber.d("Code Sent")
-				
-				verificationId = vId
-				forceResendingToken = token
-				
-				progressDialog.cancel()
-				
-				Toast.makeText(requireContext(), "Verification Code Sent", Toast.LENGTH_SHORT)
-					.show()
-			}
-		}
-	}
-	
-	private fun initOnClickListeners() {
-		initResendCodeBtnOnClickListener()
-		initSubmitBtnOnClickListener()
-	}
-	
-	private fun initResendCodeBtnOnClickListener() {
-		enterOtpBinding.resendcodeTv.setOnClickListener {
-			loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
-				resendVerificationCode(phoneNumber, forceResendingToken)
-			})
-		}
-	}
-	
-	private fun initSubmitBtnOnClickListener() {
-		enterOtpBinding.codesubmitBtn.setOnClickListener {
-			progressDialog.show()
-			
-			val vCode = enterOtpBinding.codeEt.text.toString().trim()
-			loginViewModel.setOtp(vCode)
-			
-			loginViewModel.otp.observeOnce(viewLifecycleOwner, { otp ->
-				when {
-					TextUtils.isEmpty(otp) -> {
-						progressDialog.cancel()
-						
-						Toast.makeText(
-							activity, "Please Enter Verification Code", Toast.LENGTH_SHORT
-						).show()
-					}
-					otp.length != 6 -> {
-						progressDialog.cancel()
-						
-						Toast.makeText(
-							activity, "Please Enter Valid Verification Code", Toast.LENGTH_SHORT
-						).show()
-					}
-					else -> {
-						verifyPhoneNumberWithCode(verificationId, otp)
-					}
-				}
-			})
-		}
-	}
-	
-	private fun resendVerificationCode(
-		phoneNumber: String, token: PhoneAuthProvider.ForceResendingToken
-	) {
-		if (this::phoneAuthCallbacks.isInitialized) {
-			val options = PhoneAuthOptions.newBuilder(firebaseAuth)
-				.setPhoneNumber(phoneNumber)
-				.setTimeout(60L, TimeUnit.SECONDS)
-				.setActivity(this.requireActivity())
-				.setCallbacks(phoneAuthCallbacks)
-				.setForceResendingToken(token)
-				.build()
-			
-			progressDialog.show()
-			
-			PhoneAuthProvider.verifyPhoneNumber(options)
-		}
-	}
-	
-	private fun verifyPhoneNumberWithCode(verificationId: String, code: String) {
-		val credential = PhoneAuthProvider.getCredential(verificationId, code)
-		
-		signInWithPhoneAuthCredential(credential)
-	}
-	
-	private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-		
-		firebaseAuth.signInWithCredential(credential).addOnSuccessListener {
-			Timber.d("Login Success")
-			
-			loginViewModel.checkUserExists()
-			
-			loginViewModel.userExists.observe(viewLifecycleOwner, { result ->
-				when (result) {
-					is Result.Success -> {
-						progressDialog.cancel()
-						
-						Toast.makeText(
-							requireContext(),
-							"Logged in as ${loginViewModel.phoneNumber.value}",
-							Toast.LENGTH_SHORT
-						).show()
-						
-						Timber.d("User Exists returned ${loginViewModel.userExists.value?.data}")
-						
-						if (result.data == true) {
-							val intent = Intent(requireActivity(), MainActivity::class.java)
-							startActivity(intent)
-							loginViewModel.setOtp("")
-							
-							requireActivity().finish()
-						} else {
-							requireView().findNavController()
-								.navigate(R.id.action_enterOtpFragment_to_createProfileFragment)
-							
-							loginViewModel.setOtp("")
-						}
-					}
-					
-					is Result.Loading -> {
-					}
-					
-					is Result.Error -> {
-						progressDialog.cancel()
-						
-						loginViewModel.setOtp("")
-						
-						result.exception?.let { exception -> handleLoginException(exception) }
-					}
-				}
-			})
-		}.addOnFailureListener { exception ->
-			progressDialog.cancel()
-			
-			handleLoginException(exception)
-		}
-	}
-	
-	private fun handleLoginException(exception: Exception) {
-		Timber.e(exception)
-		
-		when (exception) {
-			is FirebaseTooManyRequestsException -> {
-				Toast.makeText(
-					requireContext(),
-					"Too many attempts. Please try again later.",
-					Toast.LENGTH_LONG
-				).show()
-			}
-			is FirebaseAuthInvalidCredentialsException -> {
-				Toast.makeText(
-					requireContext(), "Incorrect Verification Code", Toast.LENGTH_SHORT
-				).show()
-			}
-			else -> {
-				Toast.makeText(requireContext(), "${exception.message}", Toast.LENGTH_SHORT).show()
-			}
-		}
-	}
+    private val loginViewModel: LoginViewModel by activityViewModels()
+    private val args: EnterOtpFragmentArgs by navArgs()
 
-	override fun onLeftAuxButtonClicked() {
-	}
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        enterOtpBinding = FragmentEnterOtpBinding.inflate(inflater, container, false)
+        return enterOtpBinding.root
+    }
 
-	override fun onNumberClicked(number: Int) {
-		var st=""
-		if(number == 0 && amount == 0){
-				st += "0"
-				enterOtpBinding.codeEt.setText(st)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-		}
-		else {
-			val newAmount = (amount * 10.0 + number).toInt()
-			if (newAmount < 1000000) {
-				amount = newAmount
-				st += amount.toString()
-				enterOtpBinding.codeEt.setText(st)
-			}
-		}
-	}
+        verificationId = args.verificationId
+        forceResendingToken = args.forceResendingToken
 
-	override fun onRightAuxButtonClicked() {
-		amount = (amount / 10.0).toInt()
-		var st = amount.toString()
-		enterOtpBinding.codeEt.setText(st)
-	}
+        enterOtpBinding.numPad.setListener(this)
+
+        initPhoneAuthCallbacks()
+
+        initOnClickListeners()
+
+        enterOtpBinding.dispNum.text =
+            "Please Enter the OTP we've sent on ${loginViewModel.phoneNumber.value}"
+
+        loginViewModel.otp.observe(viewLifecycleOwner, { otp ->
+            val codeEt = enterOtpBinding.codeEt.text
+            if (codeEt.isNullOrBlank() || codeEt.toString() != otp) {
+                enterOtpBinding.codeEt.setText(otp)
+            }
+        })
+    }
+
+    private fun initPhoneAuthCallbacks() {
+        phoneAuthCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
+                progressDialog.cancel()
+
+                Timber.d(phoneAuthCredential.smsCode)
+
+                phoneAuthCredential.smsCode?.let { loginViewModel.setOtp(it) }
+            }
+
+            override fun onVerificationFailed(exception: FirebaseException) {
+                progressDialog.cancel()
+
+                handleLoginException(exception)
+            }
+
+            override fun onCodeSent(
+                vId: String, token: PhoneAuthProvider.ForceResendingToken
+            ) {
+                super.onCodeSent(vId, token)
+
+                Timber.d("Code Sent")
+
+                verificationId = vId
+                forceResendingToken = token
+
+                progressDialog.cancel()
+
+                Toast.makeText(requireContext(), "Verification Code Sent", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun initOnClickListeners() {
+        initResendCodeBtnOnClickListener()
+        initSubmitBtnOnClickListener()
+    }
+
+    private fun initResendCodeBtnOnClickListener() {
+        enterOtpBinding.resendcodeTv.setOnClickListener {
+            loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
+                resendVerificationCode(phoneNumber, forceResendingToken)
+            })
+        }
+    }
+
+    private fun initSubmitBtnOnClickListener() {
+        enterOtpBinding.codesubmitBtn.setOnClickListener {
+            progressDialog.show()
+
+            val vCode = enterOtpBinding.codeEt.text.toString().trim()
+            loginViewModel.setOtp(vCode)
+
+            loginViewModel.otp.observeOnce(viewLifecycleOwner, { otp ->
+                when {
+                    TextUtils.isEmpty(otp) -> {
+                        progressDialog.cancel()
+
+                        Toast.makeText(
+                            activity, "Please Enter Verification Code", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    otp.length != 6 -> {
+                        progressDialog.cancel()
+
+                        Toast.makeText(
+                            activity, "Please Enter Valid Verification Code", Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else -> {
+                        verifyPhoneNumberWithCode(verificationId, otp)
+                    }
+                }
+            })
+        }
+    }
+
+    private fun resendVerificationCode(
+        phoneNumber: String, token: PhoneAuthProvider.ForceResendingToken
+    ) {
+        if (this::phoneAuthCallbacks.isInitialized) {
+            val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this.requireActivity())
+                .setCallbacks(phoneAuthCallbacks)
+                .setForceResendingToken(token)
+                .build()
+
+            progressDialog.show()
+
+            PhoneAuthProvider.verifyPhoneNumber(options)
+        }
+    }
+
+    private fun verifyPhoneNumberWithCode(verificationId: String, code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationId, code)
+
+        signInWithPhoneAuthCredential(credential)
+    }
+
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+
+        firebaseAuth.signInWithCredential(credential).addOnSuccessListener {
+            Timber.d("Login Success")
+
+            loginViewModel.checkUserExists()
+
+            loginViewModel.userExists.observe(viewLifecycleOwner, { result ->
+                when (result) {
+                    is Result.Success -> {
+                        progressDialog.cancel()
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Logged in as ${loginViewModel.phoneNumber.value}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Timber.d("User Exists returned ${loginViewModel.userExists.value?.data}")
+
+                        if (result.data == true) {
+                            val intent = Intent(requireActivity(), MainActivity::class.java)
+                            startActivity(intent)
+                            loginViewModel.setOtp("")
+
+                            requireActivity().finish()
+                        } else {
+                            requireView().findNavController()
+                                .navigate(R.id.action_enterOtpFragment_to_createProfileFragment)
+
+                            loginViewModel.setOtp("")
+                        }
+                    }
+
+                    is Result.Loading -> {
+                    }
+
+                    is Result.Error -> {
+                        progressDialog.cancel()
+
+                        loginViewModel.setOtp("")
+
+                        result.exception?.let { exception -> handleLoginException(exception) }
+                    }
+                }
+            })
+        }.addOnFailureListener { exception ->
+            progressDialog.cancel()
+
+            handleLoginException(exception)
+        }
+    }
+
+    private fun handleLoginException(exception: Exception) {
+        Timber.e(exception)
+
+        when (exception) {
+            is FirebaseTooManyRequestsException -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Too many attempts. Please try again later.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            is FirebaseAuthInvalidCredentialsException -> {
+                Toast.makeText(
+                    requireContext(), "Incorrect Verification Code", Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> {
+                Toast.makeText(requireContext(), "${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onLeftAuxButtonClicked() {
+    }
+
+    override fun onNumberClicked(number: Int) {
+        var s = number.toString()
+        st += s
+        enterOtpBinding.codeEt.setText(st)
+//		if(number == 0 && amount == 0){
+//				st += "0"
+//				enterOtpBinding.codeEt.setText(st)
+//
+//		}
+//		else {
+//			val newAmount = (amount * 10.0 + number).toInt()
+//			if (newAmount < 1000000) {
+//				amount = newAmount
+//				st += amount.toString()
+//				enterOtpBinding.codeEt.setText(st)
+//			}
+//		}
+    }
+
+    override fun onRightAuxButtonClicked() {
+        if (enterOtpBinding.codeEt.text.toString() != "XXXXXX") {
+            st = enterOtpBinding.codeEt.text.toString()
+        }
+        st = st.dropLast(1)
+        enterOtpBinding.codeEt.setText("XXXXXX")
+        if (st == "") {
+            enterOtpBinding.codeEt.setText("XXXXXX")
+        } else {
+            enterOtpBinding.codeEt.setText(st)
+        }
+    }
 }
