@@ -11,21 +11,21 @@ open class BaseFragment : Fragment() {
 	
 	protected lateinit var firebaseAuth: FirebaseAuth
 	
-	protected lateinit var progressDialog: AlertDialog
+	protected lateinit var loadingDialog: AlertDialog
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
 		firebaseAuth = (activity as BaseActivity).firebaseAuth
 		
-		initProgressDialog()
+		initLoadingDialog()
 	}
 	
-	private fun initProgressDialog() {
-		val pb = AlertDialog.Builder(requireContext(), R.style.TransparentProgressDialog)
-		pb.setView(R.layout.progress_bar)
+	private fun initLoadingDialog() {
+		val pb = AlertDialog.Builder(requireContext(), R.style.TransparentLoadingBar)
+		pb.setView(R.layout.dialog_loading_bar)
 		
-		progressDialog = pb.create()
-		progressDialog.setCanceledOnTouchOutside(false)
+		loadingDialog = pb.create()
+		loadingDialog.setCanceledOnTouchOutside(false)
 	}
 }

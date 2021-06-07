@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.buddie.data.model.UserProfile
+import com.buddie.data.model.UserModel
 import com.buddie.data.util.Result
 import com.buddie.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,24 +15,28 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(private val userRepository: UserRepository) :
 	ViewModel() {
 	
-	private val mCurrentUser: MutableLiveData<Result<UserProfile?>> = MutableLiveData()
-	val currentUser: LiveData<Result<UserProfile?>>
+	private val mCurrentUser: MutableLiveData<Result<UserModel?>> = MutableLiveData()
+	val currentUser: LiveData<Result<UserModel?>>
 		get() = mCurrentUser
 	
-	fun saveUserProfile(userProfile: UserProfile) {
+	init {
+		getCurrentUser()
+	}
+	
+	fun saveCurrentUser(userModel: UserModel) {
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result = userRepository.saveUserProfile(userProfile)
+			val result = userRepository.saveCurrentUser(userModel)
 			mCurrentUser.postValue(result)
 		}
 	}
 	
-	fun getUser() {
+	private fun getCurrentUser() {
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result = userRepository.getUser()
+			val result = userRepository.getCurrentUser()
 			mCurrentUser.postValue(result)
 		}
 	}

@@ -113,8 +113,9 @@ dependencies {
     // Loading Animations
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    // Scrollable Choice UI
     implementation 'com.webianks.library:scroll-choice:1.0.1'
 
-    compile 'com.github.davidmigloz:number-keyboard:3.0.0'
-
+    // Keyboard for Login
+    implementation 'com.github.davidmigloz:number-keyboard:3.0.0'
 }

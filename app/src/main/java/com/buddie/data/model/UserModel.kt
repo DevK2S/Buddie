@@ -3,7 +3,7 @@ package com.buddie.data.model
 import android.os.Parcel
 import android.os.Parcelable
 
-data class UserProfile(
+data class UserModel(
 	var name: String? = null,
 	var phone: String? = null,
 	var dob: String? = null,
@@ -34,13 +34,13 @@ data class UserProfile(
 		return 0
 	}
 	
-	companion object CREATOR : Parcelable.Creator<UserProfile> {
+	companion object CREATOR : Parcelable.Creator<UserModel> {
 		
-		override fun createFromParcel(parcel: Parcel): UserProfile {
-			return UserProfile(parcel)
+		override fun createFromParcel(parcel: Parcel): UserModel {
+			return UserModel(parcel)
 		}
 		
-		override fun newArray(size: Int): Array<UserProfile?> {
+		override fun newArray(size: Int): Array<UserModel?> {
 			return arrayOfNulls(size)
 		}
 	}

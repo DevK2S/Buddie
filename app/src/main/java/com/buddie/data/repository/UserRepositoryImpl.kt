@@ -1,6 +1,6 @@
 package com.buddie.data.repository
 
-import com.buddie.data.model.UserProfile
+import com.buddie.data.model.UserModel
 import com.buddie.data.repository.datasource.FirebaseSource
 import com.buddie.data.util.Result
 import com.buddie.domain.repository.UserRepository
@@ -13,22 +13,22 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(private var firebaseSource: FirebaseSource) :
 	UserRepository {
 	
-	override suspend fun saveUserProfile(userProfile: UserProfile): Result<UserProfile?> =
-		userProfileTaskToResource(firebaseSource.saveUserProfile(userProfile))
+	override suspend fun saveCurrentUser(userModel: UserModel): Result<UserModel?> =
+		userProfileTaskToResult(firebaseSource.saveCurrentUser(userModel))
 	
-	override suspend fun getUser(): Result<UserProfile?> =
-		userProfileTaskToResource(firebaseSource.getUser())
+	override suspend fun getCurrentUser(): Result<UserModel?> =
+		userProfileTaskToResult(firebaseSource.getCurrentUser())
 	
 	override suspend fun checkUserExists(): Result<Boolean> =
-		booleanTaskToResource(firebaseSource.getUser())
+		booleanTaskToResult(firebaseSource.getCurrentUser())
 	
-	private suspend fun userProfileTaskToResource(task: Task<DocumentSnapshot>): Result<UserProfile?> {
-		lateinit var result: Result<UserProfile?>
+	private suspend fun userProfileTaskToResult(task: Task<DocumentSnapshot>): Result<UserModel?> {
+		lateinit var result: Result<UserModel?>
 		
 		task.addOnSuccessListener { document ->
-			val userProfile: UserProfile? = document.toObject<UserProfile>()
-			result = if (userProfile != null) {
-				Result.Success(userProfile)
+			val userModel: UserModel? = document.toObject<UserModel>()
+			result = if (userModel != null) {
+				Result.Success(userModel)
 			} else {
 				Result.Success(null)
 			}
@@ -42,7 +42,7 @@ class UserRepositoryImpl @Inject constructor(private var firebaseSource: Firebas
 		return result
 	}
 	
-	private suspend fun booleanTaskToResource(task: Task<DocumentSnapshot>): Result<Boolean> {
+	private suspend fun booleanTaskToResult(task: Task<DocumentSnapshot>): Result<Boolean> {
 		lateinit var result: Result<Boolean>
 		
 		task.addOnSuccessListener { document ->

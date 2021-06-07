@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import com.buddie.data.model.UserProfile
+import com.buddie.data.model.UserModel
 import com.buddie.databinding.FragmentCreateProfileBinding
-import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.viewmodel.ProfileViewModel
@@ -39,8 +38,8 @@ class CreateProfileFragment : BaseFragment() {
 		binding.scrollGender.addItems(data, 2)
 		
 		binding.btnNext.setOnClickListener {
-			profileViewModel.saveUserProfile(
-				UserProfile(
+			profileViewModel.saveCurrentUser(
+				UserModel(
 					binding.editTextFirstName.text.toString(),
 					firebaseAuth.currentUser?.phoneNumber,
 					"23/02/2000",
@@ -50,7 +49,7 @@ class CreateProfileFragment : BaseFragment() {
 				)
 			)
 			
-			val intent = Intent(activity as LoginActivity, MainActivity::class.java)
+			val intent = Intent(requireContext(), MainActivity::class.java)
 			startActivity(intent)
 			requireActivity().finish()
 		}

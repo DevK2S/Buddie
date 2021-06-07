@@ -33,7 +33,7 @@ import com.davidmiguel.numberkeyboard.NumberKeyboardListener
 
 class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	
-	private lateinit var enterNumberBinding: FragmentEnterNumberBinding
+	private lateinit var binding: FragmentEnterNumberBinding
 	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
@@ -51,7 +51,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 				if (credential?.id != null) {
 					val phoneNumber = credential.id
 					loginViewModel.setPhoneNumber(phoneNumber)
-					enterNumberBinding.phoneEt.setText(phoneNumber)
+					binding.phoneEt.setText(phoneNumber)
 					
 					startPhoneNumberVerification()
 				}
@@ -61,14 +61,14 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
 	): View {
-		enterNumberBinding = FragmentEnterNumberBinding.inflate(inflater, container, false)
-		return enterNumberBinding.root
+		binding = FragmentEnterNumberBinding.inflate(inflater, container, false)
+		return binding.root
 	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		enterNumberBinding.numPad.setListener(this)
+		binding.numPad.setListener(this)
 
 		initPhoneAuthCallbacks()
 		
@@ -87,7 +87,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 			amount = newAmount
 			var st = amount.toString()
 			var ph = "+91$st"
-			enterNumberBinding.phoneEt.setText(ph)
+			binding.phoneEt.setText(ph)
 		}
 	}
 
@@ -95,7 +95,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 		amount = (amount / 10.0).toLong()
 		var st = amount.toString()
 		var ph = "+91$st"
-		enterNumberBinding.phoneEt.setText(ph)
+		binding.phoneEt.setText(ph)
 	}
 
 
@@ -108,7 +108,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 			}
 			
 			override fun onVerificationFailed(exception: FirebaseException) {
-				progressDialog.cancel()
+				loadingDialog.cancel()
 				
 				handleLoginException(exception)
 			}
@@ -123,7 +123,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 				verificationId = vId
 				forceResendingToken = token
 				
-				progressDialog.cancel()
+				loadingDialog.cancel()
 				
 				Toast.makeText(requireContext(), "Verification Code Sent", Toast.LENGTH_SHORT)
 					.show()
@@ -143,13 +143,11 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	}
 	
 	private fun initContinueBtnOnClickListener() {
-		enterNumberBinding.phoneContinueBtn.setOnClickListener {
-			var phone = enterNumberBinding.phoneEt.text.toString()
+		binding.phoneContinueBtn.setOnClickListener {
+			val phone = binding.phoneEt.text.toString()
 			if (TextUtils.isEmpty(phone)) {
 				Toast.makeText(activity, "Please Enter Phone Number", Toast.LENGTH_SHORT).show()
 			} else {
-				phone = "$phone"
-				
 				if (Patterns.PHONE.matcher(phone).matches()) {
 					loginViewModel.setPhoneNumber(phone)
 					
@@ -183,7 +181,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 					.setCallbacks(phoneAuthCallbacks)
 					.build()
 				
-				progressDialog.show()
+				loadingDialog.show()
 				
 				PhoneAuthProvider.verifyPhoneNumber(options)
 			})

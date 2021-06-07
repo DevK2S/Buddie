@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 
 class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
 
-    private lateinit var enterOtpBinding: FragmentEnterOtpBinding
+    private lateinit var binding: FragmentEnterOtpBinding
 
     private lateinit var verificationId: String
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
@@ -44,8 +44,8 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        enterOtpBinding = FragmentEnterOtpBinding.inflate(inflater, container, false)
-        return enterOtpBinding.root
+        binding = FragmentEnterOtpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,19 +54,19 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
         verificationId = args.verificationId
         forceResendingToken = args.forceResendingToken
 
-        enterOtpBinding.numPad.setListener(this)
+        binding.numPad.setListener(this)
 
         initPhoneAuthCallbacks()
 
         initOnClickListeners()
 
-        enterOtpBinding.dispNum.text =
+        binding.dispNum.text =
             "Please Enter the OTP we've sent on ${loginViewModel.phoneNumber.value}"
 
         loginViewModel.otp.observe(viewLifecycleOwner, { otp ->
-            val codeEt = enterOtpBinding.codeEt.text
+            val codeEt = binding.codeEt.text
             if (codeEt.isNullOrBlank() || codeEt.toString() != otp) {
-                enterOtpBinding.codeEt.setText(otp)
+                binding.codeEt.setText(otp)
             }
         })
     }
@@ -74,7 +74,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     private fun initPhoneAuthCallbacks() {
         phoneAuthCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
-                progressDialog.cancel()
+                loadingDialog.cancel()
 
                 Timber.d(phoneAuthCredential.smsCode)
 
@@ -82,7 +82,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
             }
 
             override fun onVerificationFailed(exception: FirebaseException) {
-                progressDialog.cancel()
+                loadingDialog.cancel()
 
                 handleLoginException(exception)
             }
@@ -97,7 +97,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
                 verificationId = vId
                 forceResendingToken = token
 
-                progressDialog.cancel()
+                loadingDialog.cancel()
 
                 Toast.makeText(requireContext(), "Verification Code Sent", Toast.LENGTH_SHORT)
                     .show()
@@ -111,7 +111,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     }
 
     private fun initResendCodeBtnOnClickListener() {
-        enterOtpBinding.resendcodeTv.setOnClickListener {
+        binding.resendcodeTv.setOnClickListener {
             loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
                 resendVerificationCode(phoneNumber, forceResendingToken)
             })
@@ -119,23 +119,23 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     }
 
     private fun initSubmitBtnOnClickListener() {
-        enterOtpBinding.codesubmitBtn.setOnClickListener {
-            progressDialog.show()
+        binding.codesubmitBtn.setOnClickListener {
+            loadingDialog.show()
 
-            val vCode = enterOtpBinding.codeEt.text.toString().trim()
+            val vCode = binding.codeEt.text.toString().trim()
             loginViewModel.setOtp(vCode)
 
             loginViewModel.otp.observeOnce(viewLifecycleOwner, { otp ->
                 when {
                     TextUtils.isEmpty(otp) -> {
-                        progressDialog.cancel()
+                        loadingDialog.cancel()
 
                         Toast.makeText(
                             activity, "Please Enter Verification Code", Toast.LENGTH_SHORT
                         ).show()
                     }
                     otp.length != 6 -> {
-                        progressDialog.cancel()
+                        loadingDialog.cancel()
 
                         Toast.makeText(
                             activity, "Please Enter Valid Verification Code", Toast.LENGTH_SHORT
@@ -161,7 +161,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
                 .setForceResendingToken(token)
                 .build()
 
-            progressDialog.show()
+            loadingDialog.show()
 
             PhoneAuthProvider.verifyPhoneNumber(options)
         }
@@ -183,7 +183,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
             loginViewModel.userExists.observe(viewLifecycleOwner, { result ->
                 when (result) {
                     is Result.Success -> {
-                        progressDialog.cancel()
+                        loadingDialog.cancel()
 
                         Toast.makeText(
                             requireContext(),
@@ -211,7 +211,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
                     }
 
                     is Result.Error -> {
-                        progressDialog.cancel()
+                        loadingDialog.cancel()
 
                         loginViewModel.setOtp("")
 
@@ -220,7 +220,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
                 }
             })
         }.addOnFailureListener { exception ->
-            progressDialog.cancel()
+            loadingDialog.cancel()
 
             handleLoginException(exception)
         }
@@ -254,7 +254,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     override fun onNumberClicked(number: Int) {
         var s = number.toString()
         st += s
-        enterOtpBinding.codeEt.setText(st)
+        binding.codeEt.setText(st)
 //		if(number == 0 && amount == 0){
 //				st += "0"
 //				enterOtpBinding.codeEt.setText(st)
@@ -271,15 +271,15 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     }
 
     override fun onRightAuxButtonClicked() {
-        if (enterOtpBinding.codeEt.text.toString() != "XXXXXX") {
-            st = enterOtpBinding.codeEt.text.toString()
+        if (binding.codeEt.text.toString() != "XXXXXX") {
+            st = binding.codeEt.text.toString()
         }
         st = st.dropLast(1)
-        enterOtpBinding.codeEt.setText("XXXXXX")
+        binding.codeEt.setText("XXXXXX")
         if (st == "") {
-            enterOtpBinding.codeEt.setText("XXXXXX")
+            binding.codeEt.setText("XXXXXX")
         } else {
-            enterOtpBinding.codeEt.setText(st)
+            binding.codeEt.setText(st)
         }
     }
 }

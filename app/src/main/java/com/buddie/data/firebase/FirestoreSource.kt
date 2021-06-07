@@ -1,6 +1,6 @@
 package com.buddie.data.firebase
 
-import com.buddie.data.model.UserProfile
+import com.buddie.data.model.UserModel
 import com.buddie.data.util.Constants
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -12,17 +12,17 @@ class FirestoreSource @Inject constructor(
 	private val firebaseAuth: FirebaseAuth, private val firebaseFirestore: FirebaseFirestore
 ) {
 	
-	suspend fun saveUserProfile(userProfile: UserProfile): Task<DocumentSnapshot> {
+	suspend fun saveCurrentUser(userModel: UserModel): Task<DocumentSnapshot> {
 		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
 			.document(firebaseAuth.currentUser!!.uid)
 			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
 			.document(Constants.FIRESTORE_USERS_PROFILE)
-			.set(userProfile)
+			.set(userModel)
 		
-		return getUser()
+		return getCurrentUser()
 	}
 	
-	suspend fun getUser(): Task<DocumentSnapshot> =
+	suspend fun getCurrentUser(): Task<DocumentSnapshot> =
 		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
 			.document(firebaseAuth.currentUser!!.uid)
 			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
