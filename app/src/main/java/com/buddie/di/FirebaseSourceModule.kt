@@ -1,8 +1,6 @@
 package com.buddie.di
 
-import com.buddie.data.repository.datasource.FirebaseFirestoreSource
-import com.buddie.data.repository.datasource.FirebaseSource
-import com.buddie.data.repository.datasourceimpl.FirebaseSourceImpl
+import com.buddie.data.firebase.FirestoreSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -17,9 +15,9 @@ class FirebaseSourceModule {
 	
 	@Provides
 	@Singleton
-	fun providesFirebaseSource(
-		firetoreSource: FirebaseFirestoreSource
-	): FirebaseSource {
-		return FirebaseSourceImpl(firetoreSource)
+	fun providesFirestoreSource(
+		firebaseAuth: FirebaseAuth, firebaseFirestore: FirebaseFirestore
+	): FirestoreSource {
+		return FirestoreSource(firebaseAuth, firebaseFirestore)
 	}
 }

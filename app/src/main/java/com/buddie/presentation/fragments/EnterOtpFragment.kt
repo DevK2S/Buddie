@@ -199,10 +199,10 @@ class EnterOtpFragment : BaseFragment(),NumberKeyboardListener {
 							
 							requireActivity().finish()
 						} else {
-							loginViewModel.setOtp("")
-							
 							requireView().findNavController()
 								.navigate(R.id.action_enterOtpFragment_to_createProfileFragment)
+							
+							loginViewModel.setOtp("")
 						}
 					}
 					

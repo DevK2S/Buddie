@@ -2,28 +2,30 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools">
-
+	
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@drawable/startscreen_bg"
 		android:orientation="vertical"
-		tools:context=".presentation.fragments.GetStartedFragment"
-		android:background="@drawable/startscreen_bg">
-
+		tools:context=".presentation.fragments.GetStartedFragment">
+		
 		<Button
 			android:id="@+id/startBtn"
 			android:layout_width="250dp"
 			android:layout_height="60dp"
 			android:layout_marginStart="111dp"
-			android:textSize="20sp"
-			android:textColor="@color/white"
 			android:layout_marginTop="580dp"
 			android:layout_marginEnd="112dp"
 			android:background="@drawable/btn_login"
-			android:theme="@style/Button.Red"
 			android:text="@string/login"
+			android:textColor="@color/white"
+			android:textSize="20sp"
+			android:theme="@style/Button.Red"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
+	
 	</androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

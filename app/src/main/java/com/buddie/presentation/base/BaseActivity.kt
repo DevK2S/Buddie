@@ -6,7 +6,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-open class BaseActivity: AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
+	
 	@Inject
 	lateinit var firebaseAuth: FirebaseAuth
 	

@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import com.buddie.R
 import com.google.firebase.auth.FirebaseAuth
 
-open class BaseFragment: Fragment() {
+open class BaseFragment : Fragment() {
 	
 	protected lateinit var firebaseAuth: FirebaseAuth
 	
