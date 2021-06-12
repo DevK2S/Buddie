@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,93 +14,90 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
             android:text="LOGIN"
             android:textAlignment="center"
-            android:textSize="25sp"
-            android:layout_marginTop="30dp"
             android:textColor="#C7C8CA"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/supportText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="We'll send an OTP to your Mobile Number"
+            android:textAlignment="center"
+            android:textColor="#C7C8CA"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/textView" />
 
         <LinearLayout
             android:id="@+id/phoneLl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
-            android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="We'll send an OTP to your Mobile Number"
-                android:textColor="#C7C8CA"
-                android:textAlignment="center"
-                android:textSize="18sp" />
+            app:layout_constraintTop_toBottomOf="@id/supportText">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="25dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/phoneEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXX XXXXX"
                     android:background="#181A20"
-                    android:textSize="25sp"
                     android:inputType="phone"
+                    android:text="XXXXX XXXXX"
+                    android:textAlignment="center"
                     android:textColor="#C7C8CA"
-                    android:textAlignment="center"/>
+                    android:textSize="25sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
+        </LinearLayout>
 
-            <!--        <EditText-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginTop="20dp"-->
-            <!--            android:hint="XXXXX XXXXX"-->
-            <!--            android:inputType="phone"-->
-            <!--            android:padding="15dp"-->
-            <!--            android:textSize="25dp"-->
-            <!--            android:textAlignment="center"-->
-            <!--            android:textColor="#C7C8CA"-->
-            <!--            android:textColorHint="#c5c5c5" />-->
+        <LinearLayout
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/phoneLl">
 
             <Button
                 android:id="@+id/phoneContinueBtn"
                 android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
+                android:background="@drawable/btn_login"
+                android:text="OTP"
                 android:textSize="20sp"
                 android:theme="@style/Button.Grey"
-                android:background="@drawable/btn_login"
-
-                android:text="OTP" />
-
+                app:layout_constraintTop_toBottomOf="@id/phoneLl" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/phoneLl"
-            tools:layout_editor_absoluteX="50dp">
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/submitBtn">
 
             <com.davidmiguel.numberkeyboard.NumberKeyboard
                 android:id="@+id/numPad"
-                android:paddingTop="40dp"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="match_parent"
+                android:paddingTop="20dp"
                 app:numberkeyboard_keyboardType="integer"
-                app:numberkeyboard_rightAuxBtnIcon="@drawable/ic_back"
-                />
+                app:numberkeyboard_rightAuxBtnIcon="@drawable/ic_back" />
 
         </LinearLayout>
 

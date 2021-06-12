@@ -253,21 +253,10 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
 
     override fun onNumberClicked(number: Int) {
         var s = number.toString()
-        st += s
-        binding.codeEt.setText(st)
-//		if(number == 0 && amount == 0){
-//				st += "0"
-//				enterOtpBinding.codeEt.setText(st)
-//
-//		}
-//		else {
-//			val newAmount = (amount * 10.0 + number).toInt()
-//			if (newAmount < 1000000) {
-//				amount = newAmount
-//				st += amount.toString()
-//				enterOtpBinding.codeEt.setText(st)
-//			}
-//		}
+        if(st.length<6){
+            st += s
+            binding.codeEt.setText(st)
+        }
     }
 
     override fun onRightAuxButtonClicked() {

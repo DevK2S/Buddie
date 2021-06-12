@@ -39,7 +39,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
-	private var amount: Long = 0
+	private var phoneNumber: Long = 0
 
 
 	private val loginViewModel: LoginViewModel by activityViewModels()
@@ -82,18 +82,18 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	}
 
 	override fun onNumberClicked(number: Int) {
-		val newAmount = (amount * 10.0 + number).toLong()
-		if (newAmount < 10000000000) {
-			amount = newAmount
-			var st = amount.toString()
+		val numberInput = (phoneNumber * 10.0 + number).toLong()
+		if (numberInput < 10000000000) {
+			phoneNumber = numberInput
+			var st = phoneNumber.toString()
 			var ph = "+91$st"
 			binding.phoneEt.setText(ph)
 		}
 	}
 
 	override fun onRightAuxButtonClicked() {
-		amount = (amount / 10.0).toLong()
-		var st = amount.toString()
+		phoneNumber = (phoneNumber / 10.0).toLong()
+		var st = phoneNumber.toString()
 		var ph = "+91$st"
 		binding.phoneEt.setText(ph)
 	}
