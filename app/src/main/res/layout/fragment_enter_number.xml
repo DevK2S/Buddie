@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#181A20"
+        android:background="@color/greyish_black"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".presentation.fragments.EnterNumberFragment">
@@ -18,7 +18,7 @@
             android:layout_marginTop="20dp"
             android:text="LOGIN"
             android:textAlignment="center"
-            android:textColor="#C7C8CA"
+            android:textColor="@color/greyish_text"
             android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
             android:layout_marginTop="35dp"
             android:text="We'll send an OTP to your Mobile Number"
             android:textAlignment="center"
-            android:textColor="#C7C8CA"
+            android:textColor="@color/greyish_text"
             android:textSize="20sp"
             app:layout_constraintTop_toBottomOf="@id/textView" />
 
@@ -52,11 +52,11 @@
                     android:id="@+id/phoneEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#181A20"
+                    android:background="@color/greyish_black"
                     android:inputType="phone"
                     android:text="XXXXX XXXXX"
                     android:textAlignment="center"
-                    android:textColor="#C7C8CA"
+                    android:textColor="@color/greyish_text"
                     android:textSize="25sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

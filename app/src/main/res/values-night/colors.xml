@@ -10,4 +10,7 @@
     <color name="btnColor">#5468FF</color>
     <color name="pink">#DD0165</color>
     <color name="midnight_express">#262A34</color>
+    <color name="greyish_black">#181A20</color>
+    <color name="dark_grey">#777777</color>
+    <color name="greyish_text">#C7C8CA</color>
 </resources>
