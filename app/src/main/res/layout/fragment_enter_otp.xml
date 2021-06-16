@@ -57,127 +57,133 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt1"
-                    android:layout_width="46dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="phone"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:maxLength="1"
-                    android:background="@color/greyish_black"
+                    android:background="@drawable/edittext_outline"
                     android:textAlignment="center"
                     android:textColor="#C7C8CA"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt2"
-                    android:layout_width="46dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:maxLength="1"
-                    android:layout_height="63dp"
                     android:inputType="phone"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/edittext_outline"
                     android:textAlignment="center"
-                    android:background="@color/greyish_black"
                     android:textColor="#C7C8CA"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt3"
-                    android:layout_width="46dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="phone"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/greyish_black"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/edittext_outline"
                     android:textAlignment="center"
                     android:maxLength="1"
                     android:textColor="#C7C8CA"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt4"
-                    android:layout_width="46dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="phone"
-                    android:background="@color/greyish_black"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/edittext_outline"
                     android:maxLength="1"
                     android:textAlignment="center"
                     android:textColor="#C7C8CA"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt5"
-                    android:layout_width="46dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="phone"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/greyish_black"
+                    android:layout_marginRight="10dp"
                     android:textAlignment="center"
+                    android:background="@drawable/edittext_outline"
                     android:textColor="#C7C8CA"
                     android:maxLength="1"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="55dp"
+                android:layout_height="70dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="1dp"
                 android:layout_marginTop="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/codeEt6"
-                    android:layout_width="46dp"
-                    android:layout_height="63dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:inputType="phone"
-                    android:layout_marginRight="5dp"
-                    android:background="@color/greyish_black"
+                    android:layout_marginRight="10dp"
                     android:textAlignment="center"
                     android:textColor="#C7C8CA"
+                    android:background="@drawable/edittext_outline"
                     android:maxLength="1"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
