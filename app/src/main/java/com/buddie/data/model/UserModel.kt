@@ -7,12 +7,14 @@ data class UserModel(
 	var name: String? = null,
 	var phone: String? = null,
 	var dob: String? = null,
+	var age: String? =null,
 	var gender: String? = null,
 	var ageIn: String? = null,
 	var loc: String? = null
 ) : Parcelable {
 	
 	constructor(parcel: Parcel) : this(
+		parcel.readString(),
 		parcel.readString(),
 		parcel.readString(),
 		parcel.readString(),
@@ -25,6 +27,7 @@ data class UserModel(
 		parcel.writeString(name)
 		parcel.writeString(phone)
 		parcel.writeString(dob)
+		parcel.writeString(age)
 		parcel.writeString(gender)
 		parcel.writeString(ageIn)
 		parcel.writeString(loc)

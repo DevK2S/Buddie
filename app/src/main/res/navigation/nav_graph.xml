@@ -2,19 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/navigation"
-	app:startDestination="@id/getStartedFragment">
+	android:id="@+id/nav_graph"
+	app:startDestination="@id/getStartedFragment"
+	>
 	
 	<fragment
 		android:id="@+id/getStartedFragment"
 		android:name="com.buddie.presentation.fragments.GetStartedFragment"
 		android:label="get_started_page"
 		tools:layout="@layout/fragment_get_started">
-		
 		<action
 			android:id="@+id/action_getStartedFragment_to_enterNumberFragment"
 			app:destination="@id/enterNumberFragment" />
-	
+		<action
+			android:id="@+id/action_getStartedFragment_to_createProfileFragment"
+			app:destination="@id/createProfileFragment" />
 	</fragment>
 	
 	<fragment
@@ -22,15 +24,12 @@
 		android:name="com.buddie.presentation.fragments.EnterNumberFragment"
 		android:label="EnterNumberFragment"
 		tools:layout="@layout/fragment_enter_number">
-		
 		<action
 			android:id="@+id/action_enterNumberFragment_to_enterOtpFragment"
-			app:destination="@id/enterOtpFragment" />
-		
+			app:destination="@id/enterOtpFragment"/>
 		<action
 			android:id="@+id/action_enterNumberFragment_to_createProfileFragment"
 			app:destination="@id/createProfileFragment" />
-	
 	</fragment>
 	
 	<fragment
@@ -38,19 +37,13 @@
 		android:name="com.buddie.presentation.fragments.EnterOtpFragment"
 		android:label="EnterOtpFragment"
 		tools:layout="@layout/fragment_enter_otp">
-		
-		<argument
-			android:name="verificationId"
-			app:argType="string" />
-		
-		<argument
-			android:name="forceResendingToken"
-			app:argType="com.google.firebase.auth.PhoneAuthProvider$ForceResendingToken" />
-		
+		<argument android:name="verificationId" app:argType="string" />
+		<argument android:name="forceResendingToken" app:argType="com.google.firebase.auth.PhoneAuthProvider$ForceResendingToken" />
 		<action
 			android:id="@+id/action_enterOtpFragment_to_createProfileFragment"
+			app:popUpTo="@id/nav_graph"
+			app:popUpToInclusive="true"
 			app:destination="@id/createProfileFragment" />
-	
 	</fragment>
 	
 	<fragment
@@ -61,7 +54,7 @@
 	
 	<activity
 		android:id="@+id/hilt_MainActivity"
-		android:name="com.buddie.presentation.activities.MainActivity"
+		android:name="com.buddie.presentation.activities.Hilt_MainActivity"
 		android:label="Hilt_MainActivity" />
 
 </navigation>

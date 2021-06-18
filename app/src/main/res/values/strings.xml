@@ -4,12 +4,12 @@
 	<string name="next">next</string>
 	<string name="resend_code">Resend Code</string>
 	<string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="Gender">GENDER</string>
-	<string name="Male">MALE</string>
-	<string name="Female">FEMALE</string>
-	<string name="DOB">D.O.B</string>
-    <string name="AgeIn">AGE INTEREST</string>
-    <string name="Interest">Interested In</string>
+    <string name="Gender">Gender</string>
+	<string name="Male">Male</string>
+	<string name="Female">Female</string>
+	<string name="DOB">Date Of Birth</string>
+    <string name="AgeIn">Age Interest</string>
+    <string name="Interest">Interest</string>
 	<string name="Loc">Location</string>
 	<string name="login">LOGIN</string>>
 </resources>

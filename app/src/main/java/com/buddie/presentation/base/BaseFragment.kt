@@ -28,4 +28,5 @@ open class BaseFragment : Fragment() {
 		loadingDialog = pb.create()
 		loadingDialog.setCanceledOnTouchOutside(false)
 	}
+	protected fun getCurrentUserUid(): String? = firebaseAuth.currentUser?.uid
 }
