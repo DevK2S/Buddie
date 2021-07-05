@@ -19,4 +19,7 @@
     <style name="Button.Grey" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/midnight_express</item>
     </style>
+    <style name="Outline.White" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
 </resources>
