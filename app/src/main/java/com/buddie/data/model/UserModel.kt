@@ -7,9 +7,11 @@ data class UserModel(
 	var name: String? = null,
 	var phone: String? = null,
 	var dob: String? = null,
-	var age: String? =null,
+	var age: String? = null,
 	var gender: String? = null,
-	var ageIn: String? = null,
+	var interest: String? = null,
+	var ageInStart: Int? = null,
+	var ageInEnd: Int? = null,
 	var loc: String? = null
 ) : Parcelable {
 	
@@ -20,6 +22,8 @@ data class UserModel(
 		parcel.readString(),
 		parcel.readString(),
 		parcel.readString(),
+		parcel.readInt(),
+		parcel.readInt(),
 		parcel.readString()
 	)
 	
@@ -29,7 +33,9 @@ data class UserModel(
 		parcel.writeString(dob)
 		parcel.writeString(age)
 		parcel.writeString(gender)
-		parcel.writeString(ageIn)
+		parcel.writeString(interest)
+		parcel.writeInt(ageInStart!!)
+		parcel.writeInt(ageInEnd!!)
 		parcel.writeString(loc)
 	}
 	

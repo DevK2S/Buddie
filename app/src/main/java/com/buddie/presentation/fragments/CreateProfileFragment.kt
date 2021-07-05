@@ -1,9 +1,9 @@
 package com.buddie.presentation.fragments
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import com.buddie.R
 import com.buddie.data.model.UserModel
+import com.buddie.data.util.Genders
 import com.buddie.databinding.FragmentCreateProfileBinding
 import com.buddie.presentation.activities.LoginActivity
 import com.buddie.presentation.activities.MainActivity
@@ -18,9 +19,9 @@ import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.viewmodel.ProfileViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import java.util.*
-import kotlin.collections.ArrayList
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CreateProfileFragment : BaseFragment() {
 
@@ -38,42 +39,109 @@ class CreateProfileFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDropDown()
-        initDatePicker()
-        binding.txtInputLayoutDOB.setOnClickListener(View.OnClickListener {
-            datePicker.show(parentFragmentManager, datePicker.toString())
+        binding.etFirstName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilFirstName.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
         })
-        datePicker.addOnPositiveButtonClickListener {
-            setdate()
+        binding.etLastName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilLastName.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+
+        binding.actvGender.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilGender.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        binding.tvDay.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilDOB.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        binding.actvInterest.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.tilInterest.error = null
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+
+
+        binding.tilDOB.setOnClickListener {
+            initDatePicker()
         }
         binding.btnNext.setOnClickListener {
-            if(validateFields())
+            loadingDialog.show()
+            if (validateFields()) {
                 Timber.d("FieldsValidated")
-            /*profileViewModel.saveCurrentUser(
-                UserModel(
-                    binding.editTextFirstName.text.toString(),
-                    firebaseAuth.currentUser?.phoneNumber,
-                    "23/02/2000",
-                    "23",
-                    "Male",
-                    "25-30",
-                    "India"
-                )
-            )*/
+            } else {
+                loadingDialog.cancel()
+            }
 
-           /* val intent = Intent(activity as LoginActivity, MainActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()*/
         }
     }
 
+    private fun saveProfile() {
+        profileViewModel.saveCurrentUser(
+            UserModel(
+                binding.etFirstName.text.toString() + " " + binding.etLastName.text.toString(),
+                firebaseAuth.currentUser?.phoneNumber,
+                createDOB(),
+                calculateAge().toString(),
+                binding.actvGender.text.toString(),
+                binding.actvInterest.text.toString(),
+                binding.rsAgeIn.valueFrom.toInt(),
+                binding.rsAgeIn.valueTo.toInt(),
+                "India"
+            )
+        )
+        loadingDialog.cancel()
+        val intent = Intent(activity as LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun initDropDown() {
-        val data: MutableList<String> = ArrayList()
-        data.add("Male")
-        data.add("Female")
-        val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-        val adapter = ArrayAdapter(requireContext(), R.layout.gender_item, items)
-        binding.autoComplete.setAdapter(adapter)
-        binding.autoCompleteGender.setAdapter(adapter)
+
+        val genders = enumValues<Genders>()
+        val adapter = ArrayAdapter(requireContext(), R.layout.gender_item, genders)
+        binding.actvGender.setAdapter(adapter)
+        binding.actvInterest.setAdapter(adapter)
     }
 
     private fun initDatePicker() {
@@ -90,69 +158,54 @@ class CreateProfileFragment : BaseFragment() {
                 .setSelection(calendar.timeInMillis)
                 .setCalendarConstraints(constraintsBuilder.build())
                 .build()
-        binding.txtInputLayoutDOB.isFocusableInTouchMode = false
+        binding.tilDOB.isFocusableInTouchMode = false
+        datePicker.show(parentFragmentManager, datePicker.toString())
+        datePicker.addOnPositiveButtonClickListener {
+            setDate(it)
+        }
     }
 
-    private fun setdate() {
-        var date = datePicker.headerText
-        var year = date.substring(7).replace(" ", "")
-        var month = date.substring(0, 4).replace(" ", "")
-        var months = listOf<String>(
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-        )
-        var setmonth = months.indexOf(month) + 1
-        var day = date.substring(4, 7).replace(" ", "")
-        day = day.replace(",", "")
-        binding.txtDay.text = day
-        binding.txtMonth.text = setmonth.toString()
-        binding.txtYear.text = year
-       // dateB = day + "/" + setmonth.toString() + "/" + year
-        //Log.e("Date Picekr","${datePicker.headerText} ${setDate} ${it}")
-        //binding.DateEditText.setText(setDate)
+    private fun setDate(it: Long) {
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dob = sdf.format(it)
+        binding.tvDay.text = dob.substring(0, 2)
+        binding.tvMonth.text = dob.substring(3, 5)
+        binding.tvYear.text = dob.substring(6)
+
     }
 
-    fun validateFields(): Boolean {
-        var firstName = binding.editTextFirstName.text.toString()
+    private fun validateFields(): Boolean {
+        val firstName = binding.etFirstName.text.toString()
         val firstNameValidation = validateName(firstName)
-        var lastName = binding.editTextLastName.text.toString()
-        val lastNameValidaton = validateName(lastName)
-        var gender = binding.autoCompleteGender.text.toString()
+        val lastName = binding.etLastName.text.toString()
+        val lastNameValidation = validateName(lastName)
+        val gender = binding.actvGender.text.toString()
         val genderValidation = validateGender(gender)
-        var interest = binding.autoComplete.text.toString()
+        val interest = binding.actvInterest.text.toString()
         val interestValidation = validateInterest(interest)
         val dobValidation = validateDob()
-        if(firstNameValidation==null && lastNameValidaton == null && dobValidation == null && genderValidation == null && interestValidation == null ) {
+        if (firstNameValidation == null && lastNameValidation == null && dobValidation == null && genderValidation == null && interestValidation == null) {
             Timber.d("validateFields: all fields valid")
             return true
         }
-        if(firstNameValidation !=null){
-            binding.textInputLayoutFirstName.error=firstNameValidation
+        if (firstNameValidation != null) {
+            binding.tilFirstName.error = firstNameValidation
         }
-        if(lastNameValidaton !=null){
-            binding.textInputLayoutLastName.error=lastNameValidaton
+        if (lastNameValidation != null) {
+            binding.tilLastName.error = lastNameValidation
         }
-        if(dobValidation !=null){
-            binding.txtInputLayoutDOB.error= dobValidation
+        if (dobValidation != null) {
+            binding.tilDOB.error = dobValidation
         }
-        if(genderValidation !=null){
-            binding.textInputLayoutGender.error=genderValidation
+        if (genderValidation != null) {
+            binding.tilGender.error = genderValidation
         }
-        if(interestValidation != null){
-            binding.textInputLayoutInterest.error=interestValidation
+        if (interestValidation != null) {
+            binding.tilInterest.error = interestValidation
         }
 
-        return false;
+        return false
     }
 
     private fun validateInterest(interest: String): String? {
@@ -170,9 +223,9 @@ class CreateProfileFragment : BaseFragment() {
     }
 
     private fun validateDob(): String? {
-        if(binding.txtDay.text.toString() == "dd" || binding.txtMonth.text.toString() == "mm" || binding.txtYear.text.toString()=="yyyy") {
+        if (binding.tvDay.text.toString() == "dd" || binding.tvMonth.text.toString() == "mm" || binding.tvYear.text.toString() == "yyyy") {
             return "Date Of Birth cannot be empty"
-           Timber.d("day %s",binding.txtDay.text.toString())
+            Timber.d("day %s", binding.tvDay.text.toString())
         }
         return null
     }
@@ -189,13 +242,13 @@ class CreateProfileFragment : BaseFragment() {
     }
 
     private fun calculateAge(): Int {
-        val year = Integer.parseInt(binding.txtYear.text.toString())
-        val currentYear =Calendar.getInstance().get(Calendar.YEAR)
-        return currentYear-year
+        val year = Integer.parseInt(binding.tvYear.text.toString())
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        return currentYear - year
     }
-    private fun createDOB():String {
-        var dateB = binding.txtDay.text.toString() + "/" + binding.txtMonth.text.toString() + "/" + binding.txtYear.text.toString()
-        return dateB
+
+    private fun createDOB(): String {
+        return binding.tvDay.text.toString() + "/" + binding.tvMonth.text.toString() + "/" + binding.tvYear.text.toString()
     }
 
 

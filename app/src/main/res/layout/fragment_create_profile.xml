@@ -7,288 +7,311 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".presentation.fragments.CreateProfileFragment">
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/greyish_black">
 
-            <TextView
-                android:id="@+id/textProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textSize="36sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardviewImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="56dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="56dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textProfile" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutFirstName"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="36dp"
-                app:errorEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:hint="Firstname"
-                app:layout_constraintTop_toBottomOf="@id/cardviewImage">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextFirstName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:textSize="18dp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="36dp"
-                app:errorEnabled="true"
-                android:hint="Lastname"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutFirstName">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutLastName">
+                android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/tv_Profile"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="36dp"
-					android:gravity="center"
-                    android:text="@string/Gender"
-                    android:textSize="24sp" />
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textColor="@color/greyish_text"
+                    android:textSize="36sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_Image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="56dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_Profile" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutGender"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+                    android:id="@+id/til_FirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintEnabled="false"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp">
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="Firstname"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_Image">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteGender"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_FirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:background="@drawable/edittext_outline"
+                        android:imeOptions="actionDone"
+                        android:textSize="18dp" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutDOB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutGender">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
-                    android:text="@string/DOB"
-                    android:textSize="24sp" />
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/txtInputLayoutDOB"
+                    android:id="@+id/til_LastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="20dp"
+                    android:hint="Lastname"
                     app:errorEnabled="true"
-                    android:orientation="horizontal">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_FirstName">
 
-                    <LinearLayout
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_LastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_outline"
+                        android:imeOptions="actionDone" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_Gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_LastName">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="16dp"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="16dp"
+                        android:gravity="center"
+                        android:text="@string/Gender"
+                        android:textSize="24sp" />
 
-                        <TextView
-                            android:id="@+id/txtDay"
-                            android:background="@color/white"
-                            android:layout_width="60dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="left"
-                            android:gravity="center"
-                            android:text="dd"
-                            android:textSize="22sp" />
-
-                        <TextView
-                            android:id="@+id/txtMonth"
-                            android:layout_width="60dp"
-                            android:layout_height="48dp"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="24dp"
-                            android:layout_marginEnd="24dp"
-                            android:gravity="center"
-                            android:text="mm"
-                            android:textSize="22sp" />
-
-                        <TextView
-                            android:id="@+id/txtYear"
-                            android:layout_width="96dp"
-                            android:layout_height="48dp"
-                            android:gravity="center"
-                            android:text="yyyy"
-                            android:textSize="22sp" />
-
-                    </LinearLayout>
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutInterest"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutDOB">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-					android:layout_marginStart="36dp"
-                    android:text="@string/Interest"
-                    android:textSize="24sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutInterest"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    app:hintEnabled="false"
-                    android:layout_marginEnd="16dp">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoComplete"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_Gender"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/rounded_corners"
+                        app:hintEnabled="false">
 
-            </LinearLayout>
+                        <AutoCompleteTextView
+                            android:id="@+id/actv_Gender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edittext_outline"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayoutAgeIn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutInterest">
 
-                <TextView
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_DOB"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_Gender">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/DOB"
+                        android:textSize="24sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_DOB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:errorEnabled="true">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_Day"
+                                android:layout_width="60dp"
+                                android:layout_height="48dp"
+                                android:layout_gravity="left"
+                                android:background="@drawable/edittext_outline"
+                                android:gravity="center"
+                                android:text="dd"
+                                android:textSize="22sp" />
+
+                            <TextView
+                                android:id="@+id/tv_Month"
+                                android:layout_width="60dp"
+                                android:layout_height="48dp"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginEnd="24dp"
+                                android:background="@drawable/edittext_outline"
+                                android:gravity="center"
+                                android:text="mm"
+                                android:textSize="22sp" />
+
+                            <TextView
+                                android:id="@+id/tv_Year"
+                                android:layout_width="96dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/edittext_outline"
+                                android:gravity="center"
+                                android:text="yyyy"
+                                android:textSize="22sp" />
+
+                        </LinearLayout>
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_Interest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_corners"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_DOB">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:gravity="center"
+                        android:text="@string/Interest"
+                        android:textSize="24sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_Interest"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/rounded_corners"
+                        app:hintEnabled="false">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/actv_Interest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_corners"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_AgeIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_corners"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_Interest">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/AgeIn"
+                        android:textSize="24sp" />
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/rs_ageIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:stepSize="1.0"
+                        android:valueFrom="18.0"
+                        android:valueTo="100.0"
+                        app:values="@array/initial_slider_values" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_Loc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_corners"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_AgeIn">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="36dp"
+                        android:text="@string/Loc"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_Next"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
-                    android:text="@string/AgeIn"
-                    android:textSize="24sp" />
-
-                <!---<com.google.android.material.slider.RangeSlider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    app:values="@array/initial_slider_values"
-                    android:valueFrom="18.0"
-                    android:valueTo="100.0"
-                    android:stepSize="1.0"
-                    />-->
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="36dp"
+                    android:background="@drawable/btn_login"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:theme="@style/Button.Red"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_Loc" />
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutLoc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutAgeIn">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
-                    android:text="@string/Loc"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnNext"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="36dp"
-                android:background="@drawable/btn_login"
-                android:text="@string/next"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:theme="@style/Button.Red"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayoutLoc" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
