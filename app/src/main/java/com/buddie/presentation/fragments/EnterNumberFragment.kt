@@ -17,33 +17,26 @@ import com.buddie.databinding.FragmentEnterNumberBinding
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.utils.observeOnce
 import com.buddie.presentation.viewmodel.LoginViewModel
+import com.davidmiguel.numberkeyboard.NumberKeyboardListener
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.*
+import com.hbb20.CountryCodePicker
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import com.davidmiguel.numberkeyboard.NumberKeyboardListener
 
 class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
-	
+
 	private lateinit var binding: FragmentEnterNumberBinding
-	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-
+	private lateinit var ccp:CountryCodePicker
 	private var phoneNumber: Long = 0
-
-
 	private val loginViewModel: LoginViewModel by activityViewModels()
-	
 	private val phoneNumberHintResult =
 		registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
 			if (result.resultCode == Activity.RESULT_OK) {
@@ -68,6 +61,8 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		ccp=binding.ccp
+		ccp.registerCarrierNumberEditText(binding.phoneEt)
 		binding.numPad.setListener(this)
 
 		initPhoneAuthCallbacks()
@@ -86,7 +81,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 		if (numberInput < 10000000000) {
 			phoneNumber = numberInput
 			var st = phoneNumber.toString()
-			var ph = "+91$st"
+			var ph = "$st"
 			binding.phoneEt.setText(ph)
 		}
 	}
@@ -94,7 +89,7 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	override fun onRightAuxButtonClicked() {
 		phoneNumber = (phoneNumber / 10.0).toLong()
 		var st = phoneNumber.toString()
-		var ph = "+91$st"
+		var ph = "$st"
 		binding.phoneEt.setText(ph)
 	}
 
@@ -144,13 +139,13 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	
 	private fun initContinueBtnOnClickListener() {
 		binding.phoneContinueBtn.setOnClickListener {
-			val phone = binding.phoneEt.text.toString()
+			val phone = ccp.fullNumberWithPlus.toString()
 			if (TextUtils.isEmpty(phone)) {
 				Toast.makeText(activity, "Please Enter Phone Number", Toast.LENGTH_SHORT).show()
 			} else {
 				if (Patterns.PHONE.matcher(phone).matches()) {
 					loginViewModel.setPhoneNumber(phone)
-					
+					Toast.makeText(requireContext(),ccp.fullNumberWithPlus.toString(),Toast.LENGTH_SHORT).show()
 					startPhoneNumberVerification()
 				} else {
 					Toast.makeText(activity, "Please Enter Valid Phone Number", Toast.LENGTH_SHORT)

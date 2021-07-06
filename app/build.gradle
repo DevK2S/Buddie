@@ -118,4 +118,8 @@ dependencies {
 
     // Keyboard for Login
     implementation 'com.github.davidmigloz:number-keyboard:3.0.0'
+
+    // Country Code Picker
+    implementation 'com.hbb20:ccp:2.5.3'
+
 }

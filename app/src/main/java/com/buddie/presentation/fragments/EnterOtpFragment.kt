@@ -73,11 +73,21 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
         private val previousView: EditText?
     ) : View.OnKeyListener {
         override fun onKey(p0: View?, keyCode: Int, event: KeyEvent?): Boolean {
+//            if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL  && currentView.text.isEmpty()) {
+//                if (previousView != null) {
+//                    if(currentView.id == R.id.codeEt2  && previousView.id == R.id.codeEt1){
+//                        previousView.text= null
+//                        previousView.requestFocus()
+//                        return true
+//                    }
+//                }
+//            }
             if (event!!.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL && currentView.id != R.id.codeEt1 && currentView.text.isEmpty()) {
                 previousView!!.text = null
                 previousView.requestFocus()
                 return true
             }
+
             return false
         }
 
@@ -90,7 +100,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
-    private var count:Int = 0
+    private var count: Int = 0
     private var st: String = ""
 
     private val loginViewModel: LoginViewModel by activityViewModels()
@@ -133,7 +143,7 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
         binding.codeEt6.setOnKeyListener(DeleteTextWatcher(binding.codeEt6, binding.codeEt5))
 
         binding.codeEt1.requestFocus()
-        count=1
+        count = 1
 
         loginViewModel.otp.observe(viewLifecycleOwner, { otp ->
             //Needs change I replaced codeEt with codeEt1
@@ -141,14 +151,14 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
                 .trim() + binding.codeEt3.text.toString().trim() + binding.codeEt4.text.toString()
                 .trim() + binding.codeEt5.text.toString().trim() + binding.codeEt6.text.toString()
                 .trim()
-            if ((codeEt.isNullOrBlank() || codeEt != otp) && !otp.isNullOrEmpty() ) {
+            if ((codeEt.isNullOrBlank() || codeEt != otp) && !otp.isNullOrEmpty()) {
                 binding.codeEt1.setText(otp[0].toString())
                 binding.codeEt2.setText(otp[1].toString())
                 binding.codeEt3.setText(otp[2].toString())
                 binding.codeEt4.setText(otp[3].toString())
                 binding.codeEt5.setText(otp[4].toString())
                 binding.codeEt6.setText(otp[5].toString())
-                count=6
+                count = 6
             }
         })
     }
@@ -339,33 +349,33 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
 
     override fun onNumberClicked(number: Int) {
         var s = number.toString()
-        when(count){
-            1-> {
+        when (count) {
+            1 -> {
                 binding.codeEt1.setText(s)
                 count++
                 binding.codeEt2.requestFocus()
             }
-            2-> {
+            2 -> {
                 binding.codeEt2.setText(s)
                 count++
                 binding.codeEt3.requestFocus()
             }
-            3-> {
+            3 -> {
                 binding.codeEt3.setText(s)
                 count++
                 binding.codeEt4.requestFocus()
             }
-            4-> {
+            4 -> {
                 binding.codeEt4.setText(s)
                 count++
                 binding.codeEt5.requestFocus()
             }
-            5-> {
+            5 -> {
                 binding.codeEt5.setText(s)
                 count++
                 binding.codeEt6.requestFocus()
             }
-            6-> {
+            6 -> {
                 binding.codeEt6.setText(s)
             }
         }
@@ -377,34 +387,64 @@ class EnterOtpFragment : BaseFragment(), NumberKeyboardListener {
     }
 
     override fun onRightAuxButtonClicked() {
-        when(count){
-            1-> {
+        when (count) {
+            1 -> {
                 binding.codeEt1.setText("")
             }
-            2-> {
-                binding.codeEt2.setText("")
-                count--
-                binding.codeEt1.requestFocus()
+            2 -> {
+                if (binding.codeEt2.text.toString()=="") {
+                    binding.codeEt1.requestFocus()
+                    binding.codeEt1.setText("")
+                    count--
+                } else {
+                    binding.codeEt2.setText("")
+                    count--
+                    binding.codeEt1.requestFocus()
+                }
             }
-            3-> {
-                binding.codeEt3.setText("")
-                count--
-                binding.codeEt2.requestFocus()
+            3 -> {
+                if (binding.codeEt3.text.toString()=="") {
+                    binding.codeEt2.requestFocus()
+                    binding.codeEt2.setText("")
+                    count--
+                } else {
+                    binding.codeEt3.setText("")
+                    count--
+                    binding.codeEt2.requestFocus()
+                }
             }
-            4-> {
-                binding.codeEt4.setText("")
-                count--
-                binding.codeEt3.requestFocus()
+            4 -> {
+                if (binding.codeEt4.text.toString()=="") {
+                    binding.codeEt3.requestFocus()
+                    binding.codeEt3.setText("")
+                    count--
+                } else {
+                    binding.codeEt4.setText("")
+                    count--
+                    binding.codeEt3.requestFocus()
+                }
             }
-            5-> {
-                binding.codeEt5.setText("")
-                count--
-                binding.codeEt4.requestFocus()
+            5 -> {
+                if (binding.codeEt5.text.toString()=="") {
+                    binding.codeEt4.requestFocus()
+                    binding.codeEt4.setText("")
+                    count--
+                } else {
+                    binding.codeEt5.setText("")
+                    count--
+                    binding.codeEt4.requestFocus()
+                }
             }
-            6-> {
-                binding.codeEt6.setText("")
-                count--
-                binding.codeEt5.requestFocus()
+            6 -> {
+                if (binding.codeEt6.text.toString()=="") {
+                    binding.codeEt5.requestFocus()
+                    binding.codeEt5.setText("")
+                    count--
+                } else {
+                    binding.codeEt6.setText("")
+                    count--
+                    binding.codeEt5.requestFocus()
+                }
             }
         }
 //        if (binding.codeEt.text.toString() != "XXXXXX") {
