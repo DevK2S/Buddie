@@ -27,7 +27,7 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result = userRepository.saveCurrentUser(userModel)
+			val result = userRepository.saveCurrentUserData(userModel)
 			mCurrentUser.postValue(result)
 		}
 	}
@@ -36,7 +36,7 @@ class ProfileViewModel @Inject constructor(private val userRepository: UserRepos
 		mCurrentUser.postValue(Result.Loading())
 		
 		viewModelScope.launch {
-			val result = userRepository.getCurrentUser()
+			val result = userRepository.getCurrentUserData()
 			mCurrentUser.postValue(result)
 		}
 	}

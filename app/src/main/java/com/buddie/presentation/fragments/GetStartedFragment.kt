@@ -14,11 +14,14 @@ import com.buddie.databinding.FragmentGetStartedBinding
 import com.buddie.presentation.activities.MainActivity
 import com.buddie.presentation.base.BaseFragment
 import com.buddie.presentation.viewmodel.LoginViewModel
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import timber.log.Timber
 
 class GetStartedFragment : BaseFragment() {
 	
 	private lateinit var binding: FragmentGetStartedBinding
+	
 	private val loginViewModel: LoginViewModel by activityViewModels()
 	
 	override fun onCreateView(
@@ -30,60 +33,83 @@ class GetStartedFragment : BaseFragment() {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
-		//loginViewModel.checkUserExists()
-
-		binding.startBtn.setOnClickListener {
+		
+		binding.btnGetStarted.setOnClickListener {
 			userExists()
 		}
-
 	}
-
+	
 	private fun userExists() {
+		loadingDialog.show()
 		if (getCurrentUserUid() != null) {
-			loginViewModel.userExists.observe(viewLifecycleOwner, { result ->
+			loginViewModel.userDataExists.observe(viewLifecycleOwner, { result ->
 				when (result) {
 					is Result.Success -> {
-						//progressDialog.cancel()
-
-						Toast.makeText(
-							requireContext(),
-							"Logged in as ${loginViewModel.phoneNumber.value}",
-							Toast.LENGTH_SHORT
-						).show()
-
-						Timber.d("User Exists returned ${loginViewModel.userExists.value?.data}")
-
+						loadingDialog.cancel()
+						
+						if (firebaseAuth.currentUser != null) {
+							Toast.makeText(
+								requireContext(),
+								"Logged in with ${firebaseAuth.currentUser!!.phoneNumber}",
+								Toast.LENGTH_SHORT
+							).show()
+						}
+						
+						Timber.d("User Exists returned ${loginViewModel.userDataExists.value?.data}")
+						
 						if (result.data == true) {
 							val intent = Intent(requireActivity(), MainActivity::class.java)
 							startActivity(intent)
 							loginViewModel.setOtp("")
-
+							
 							requireActivity().finish()
 						} else {
 							loginViewModel.setOtp("")
-
+							
 							requireView().findNavController()
 								.navigate(R.id.action_getStartedFragment_to_createProfileFragment)
 						}
 					}
-
+					
 					is Result.Loading -> {
 					}
-
+					
 					is Result.Error -> {
-						//progressDialog.cancel()
-
+						loadingDialog.cancel()
+						
 						loginViewModel.setOtp("")
-
-						//result.exception?.let { exception -> handleLoginException(exception) }
+						
+						result.exception?.let { exception -> handleLoginException(exception) }
 					}
 				}
 			})
+		} else {
+			loadingDialog.cancel()
+			
+			requireView().findNavController()
+				.navigate(R.id.action_getStartedFragment_to_enterNumberFragment)
 		}
-		else
-		{
-			requireView().findNavController().navigate(R.id.action_getStartedFragment_to_enterNumberFragment)
+	}
+	
+	private fun handleLoginException(exception: Exception) {
+		Timber.e(exception)
+		
+		when (exception) {
+			is FirebaseTooManyRequestsException -> {
+				Toast.makeText(
+					requireContext(),
+					"Too many attempts. Please try again later.",
+					Toast.LENGTH_LONG
+				).show()
+			}
+			is FirebaseAuthInvalidCredentialsException -> {
+				Toast.makeText(
+					requireContext(), "Incorrect Verification Code", Toast.LENGTH_SHORT
+				).show()
+			}
+			else -> {
+				Toast.makeText(requireContext(), "${exception.message}", Toast.LENGTH_SHORT).show()
+			}
 		}
 	}
 }

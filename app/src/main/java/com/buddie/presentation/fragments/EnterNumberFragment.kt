@@ -23,33 +23,42 @@ import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.*
-import com.hbb20.CountryCodePicker
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
-
+class EnterNumberFragment : BaseFragment(), NumberKeyboardListener {
+	
 	private lateinit var binding: FragmentEnterNumberBinding
+	
 	private lateinit var verificationId: String
 	private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
 	private lateinit var phoneAuthCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-	private lateinit var ccp:CountryCodePicker
-	private var phoneNumber: Long = 0
+	
 	private val loginViewModel: LoginViewModel by activityViewModels()
+	
 	private val phoneNumberHintResult =
 		registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
 			if (result.resultCode == Activity.RESULT_OK) {
 				val credential: Credential? = result.data?.getParcelableExtra(Credential.EXTRA_KEY)
 				if (credential?.id != null) {
-					val phoneNumber = credential.id
+					var phoneNumber = credential.id
+					
 					loginViewModel.setPhoneNumber(phoneNumber)
-					binding.phoneEt.setText(phoneNumber)
+					
+					phoneNumber = phoneNumber.substring(phoneNumber.length - 10)
+					binding.etPhoneNumber.setText(phoneNumber)
 					
 					startPhoneNumberVerification()
 				}
 			}
 		}
+	
+	private var phoneNumber: Long = 0
 	
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -60,40 +69,44 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
-		ccp=binding.ccp
-		ccp.registerCarrierNumberEditText(binding.phoneEt)
-		binding.numPad.setListener(this)
-
+		
+		binding.countryCodePicker.registerCarrierNumberEditText(binding.etPhoneNumber)
+		
+		binding.numberKeyboard.setListener(this)
+		
 		initPhoneAuthCallbacks()
 		
 		initOnClickListeners()
 		
 		displayPhoneNumberHints()
 	}
-
+	
 	override fun onLeftAuxButtonClicked() {
-
+	
 	}
-
+	
 	override fun onNumberClicked(number: Int) {
-		val numberInput = (phoneNumber * 10.0 + number).toLong()
-		if (numberInput < 10000000000) {
+		val numberInput = phoneNumber * 10 + number
+		
+		if (numberInput == 0.toLong()) {
+			phoneNumber = 0
+			binding.etPhoneNumber.setText("")
+		} else if (numberInput.toString().length <= 10) {
 			phoneNumber = numberInput
-			var st = phoneNumber.toString()
-			var ph = "$st"
-			binding.phoneEt.setText(ph)
+			binding.etPhoneNumber.setText(phoneNumber.toString())
 		}
 	}
-
+	
 	override fun onRightAuxButtonClicked() {
-		phoneNumber = (phoneNumber / 10.0).toLong()
-		var st = phoneNumber.toString()
-		var ph = "$st"
-		binding.phoneEt.setText(ph)
+		phoneNumber /= 10
+		
+		if (phoneNumber == 0.toLong()) {
+			binding.etPhoneNumber.setText("")
+		} else {
+			binding.etPhoneNumber.setText(phoneNumber.toString())
+		}
 	}
-
-
+	
 	private fun initPhoneAuthCallbacks() {
 		phoneAuthCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 			override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
@@ -134,18 +147,19 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	}
 	
 	private fun initOnClickListeners() {
-		initContinueBtnOnClickListener()
+		initSendOtpButtonOnClickListener()
 	}
 	
-	private fun initContinueBtnOnClickListener() {
-		binding.phoneContinueBtn.setOnClickListener {
-			val phone = ccp.fullNumberWithPlus.toString()
+	private fun initSendOtpButtonOnClickListener() {
+		binding.btnSendOtp.setOnClickListener {
+			val phone = binding.countryCodePicker.fullNumberWithPlus.toString()
+			
 			if (TextUtils.isEmpty(phone)) {
 				Toast.makeText(activity, "Please Enter Phone Number", Toast.LENGTH_SHORT).show()
 			} else {
 				if (Patterns.PHONE.matcher(phone).matches()) {
 					loginViewModel.setPhoneNumber(phone)
-					Toast.makeText(requireContext(),ccp.fullNumberWithPlus.toString(),Toast.LENGTH_SHORT).show()
+					
 					startPhoneNumberVerification()
 				} else {
 					Toast.makeText(activity, "Please Enter Valid Phone Number", Toast.LENGTH_SHORT)
@@ -168,6 +182,8 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 	
 	private fun startPhoneNumberVerification() {
 		if (this::phoneAuthCallbacks.isInitialized) {
+			loadingDialog.show()
+			
 			loginViewModel.phoneNumber.observeOnce(viewLifecycleOwner, { phoneNumber ->
 				val options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
 					.setPhoneNumber(phoneNumber)
@@ -175,8 +191,6 @@ class EnterNumberFragment : BaseFragment(),NumberKeyboardListener {
 					.setActivity(this.requireActivity())
 					.setCallbacks(phoneAuthCallbacks)
 					.build()
-				
-				loadingDialog.show()
 				
 				PhoneAuthProvider.verifyPhoneNumber(options)
 			})

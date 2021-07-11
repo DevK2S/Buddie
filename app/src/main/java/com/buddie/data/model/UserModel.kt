@@ -1,56 +1,29 @@
 package com.buddie.data.model
 
-import android.os.Parcel
 import android.os.Parcelable
+import com.buddie.data.util.GendersInterest
+import com.buddie.data.util.GendersSelf
+import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UserModel(
-	var name: String? = null,
-	var phone: String? = null,
-	var dob: String? = null,
-	var age: String? = null,
-	var gender: String? = null,
-	var interest: String? = null,
-	var ageInStart: Int? = null,
-	var ageInEnd: Int? = null,
-	var loc: String? = null
+	@get:PropertyName("name") @set:PropertyName("name") var name: String,
+	
+	@get:PropertyName("phone_number") @set:PropertyName("phone_number") var phoneNumber: String,
+	
+	@get:PropertyName("date_of_birth") @set:PropertyName("date_of_birth") var dateOfBirth: Long,
+	
+	@get:PropertyName("gender") @set:PropertyName("gender") var gender: GendersSelf,
+	
+	@get:PropertyName("gender_interest") @set:PropertyName("gender_interest") var genderInterest: GendersInterest,
+	
+	@get:PropertyName("age_interest_start") @set:PropertyName("age_interest_start") var ageInterestStart: Int,
+	
+	@get:PropertyName("age_interest_end") @set:PropertyName("age_interest_end") var ageInterestEnd: Int,
+	
+	@get:PropertyName("location_city") @set:PropertyName("location_city") var locationCity: String
 ) : Parcelable {
 	
-	constructor(parcel: Parcel) : this(
-		parcel.readString(),
-		parcel.readString(),
-		parcel.readString(),
-		parcel.readString(),
-		parcel.readString(),
-		parcel.readString(),
-		parcel.readInt(),
-		parcel.readInt(),
-		parcel.readString()
-	)
-	
-	override fun writeToParcel(parcel: Parcel, flags: Int) {
-		parcel.writeString(name)
-		parcel.writeString(phone)
-		parcel.writeString(dob)
-		parcel.writeString(age)
-		parcel.writeString(gender)
-		parcel.writeString(interest)
-		parcel.writeInt(ageInStart!!)
-		parcel.writeInt(ageInEnd!!)
-		parcel.writeString(loc)
-	}
-	
-	override fun describeContents(): Int {
-		return 0
-	}
-	
-	companion object CREATOR : Parcelable.Creator<UserModel> {
-		
-		override fun createFromParcel(parcel: Parcel): UserModel {
-			return UserModel(parcel)
-		}
-		
-		override fun newArray(size: Int): Array<UserModel?> {
-			return arrayOfNulls(size)
-		}
-	}
+	constructor() : this("", "", 0, GendersSelf.MALE, GendersInterest.FEMALE, 18, 100, "India")
 }

@@ -14,7 +14,7 @@
 		android:indeterminateBehavior="repeat"
 		android:max="100"
 		android:paddingVertical="32dp"
-		app:SpinKit_Color="@color/pink"
+		app:SpinKit_Color="@color/razzmatazz"
 		app:SpinKit_Style="Wave"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 package com.buddie.presentation
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.buddie.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -15,5 +16,7 @@ class BuddieApp : Application() {
 		if (BuildConfig.DEBUG) {
 			Timber.plant(DebugTree())
 		}
+		
+		AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 	}
 }

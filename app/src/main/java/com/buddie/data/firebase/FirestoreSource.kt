@@ -12,20 +12,24 @@ class FirestoreSource @Inject constructor(
 	private val firebaseAuth: FirebaseAuth, private val firebaseFirestore: FirebaseFirestore
 ) {
 	
-	suspend fun saveCurrentUser(userModel: UserModel): Task<DocumentSnapshot> {
+	suspend fun saveCurrentUserData(userModel: UserModel): Task<DocumentSnapshot>? {
 		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
 			.document(firebaseAuth.currentUser!!.uid)
 			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
 			.document(Constants.FIRESTORE_USERS_PROFILE)
 			.set(userModel)
 		
-		return getCurrentUser()
+		return getCurrentUserData()
 	}
 	
-	suspend fun getCurrentUser(): Task<DocumentSnapshot> =
-		firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
-			.document(firebaseAuth.currentUser!!.uid)
-			.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
-			.document(Constants.FIRESTORE_USERS_PROFILE)
-			.get()
+	suspend fun getCurrentUserData(): Task<DocumentSnapshot>? =
+		if (firebaseAuth.currentUser != null) {
+			firebaseFirestore.collection(Constants.FIRESTORE_USERS_COLLECTION)
+				.document(firebaseAuth.currentUser!!.uid)
+				.collection(Constants.FIRESTORE_USERS_INFO_COLLECTION)
+				.document(Constants.FIRESTORE_USERS_PROFILE)
+				.get()
+		} else {
+			null;
+		}
 }

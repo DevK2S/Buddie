@@ -5,7 +5,7 @@ import com.buddie.data.util.Result
 
 interface UserRepository {
 	
-	suspend fun saveCurrentUser(userModel: UserModel): Result<UserModel?>
-	suspend fun getCurrentUser(): Result<UserModel?>
-	suspend fun checkUserExists(): Result<Boolean>
+	suspend fun saveCurrentUserData(userModel: UserModel): Result<UserModel?>
+	suspend fun getCurrentUserData(): Result<UserModel?>
+	suspend fun checkUserDataExists(): Result<Boolean>
 }

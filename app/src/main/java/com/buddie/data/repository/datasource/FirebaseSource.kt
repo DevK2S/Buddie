@@ -6,6 +6,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 interface FirebaseSource {
 	
-	suspend fun saveCurrentUser(userModel: UserModel): Task<DocumentSnapshot>
-	suspend fun getCurrentUser(): Task<DocumentSnapshot>
+	suspend fun saveCurrentUserData(userModel: UserModel): Task<DocumentSnapshot>?
+	suspend fun getCurrentUserData(): Task<DocumentSnapshot>?
 }

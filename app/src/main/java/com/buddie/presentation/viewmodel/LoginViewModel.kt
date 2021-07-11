@@ -13,9 +13,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 	
-	private val mUserExists: MutableLiveData<Result<Boolean>> = MutableLiveData()
-	val userExists: LiveData<Result<Boolean>>
-		get() = mUserExists
+	private val mUserDataExists: MutableLiveData<Result<Boolean>> = MutableLiveData()
+	val userDataExists: LiveData<Result<Boolean>>
+		get() = mUserDataExists
 	
 	private val mPhoneNumber: MutableLiveData<String> = MutableLiveData()
 	val phoneNumber: LiveData<String>
@@ -25,13 +25,8 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
 	val otp: LiveData<String>
 		get() = mOtp
 	
-	fun checkUserExists() {
-		mUserExists.postValue(Result.Loading())
-		
-		viewModelScope.launch {
-			val result = userRepository.checkUserExists()
-			mUserExists.postValue(result)
-		}
+	init {
+		checkUserDataExists()
 	}
 	
 	fun setPhoneNumber(phoneNumber: String) {
@@ -40,5 +35,14 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
 	
 	fun setOtp(otp: String) {
 		mOtp.postValue(otp)
+	}
+	
+	private fun checkUserDataExists() {
+		mUserDataExists.postValue(Result.Loading())
+		
+		viewModelScope.launch {
+			val result = userRepository.checkUserDataExists()
+			mUserDataExists.postValue(result)
+		}
 	}
 }

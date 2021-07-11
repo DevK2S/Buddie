@@ -10,8 +10,9 @@ import javax.inject.Inject
 class FirebaseSourceImpl @Inject constructor(private val firestoreSource: FirestoreSource) :
 	FirebaseSource {
 	
-	override suspend fun saveCurrentUser(userModel: UserModel): Task<DocumentSnapshot> =
-		firestoreSource.saveCurrentUser(userModel)
+	override suspend fun saveCurrentUserData(userModel: UserModel): Task<DocumentSnapshot>? =
+		firestoreSource.saveCurrentUserData(userModel)
 	
-	override suspend fun getCurrentUser(): Task<DocumentSnapshot> = firestoreSource.getCurrentUser()
+	override suspend fun getCurrentUserData(): Task<DocumentSnapshot>? =
+		firestoreSource.getCurrentUserData()
 }

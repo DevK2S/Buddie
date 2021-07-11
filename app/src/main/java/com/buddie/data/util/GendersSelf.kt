@@ -1,5 +1,5 @@
 package com.buddie.data.util
 
-enum class Genders {
+enum class GendersSelf {
     MALE, FEMALE, OTHERS
 }
