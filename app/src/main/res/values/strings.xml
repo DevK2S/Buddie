@@ -1,24 +1,26 @@
 <resources>
-	<string name="app_name">Buddie</string>
-	
-	<string name="lets_get_started">Let\'s get started</string>
-	
-	<string name="login">LOGIN</string>
-	<string name="receive_otp_text">Enter your Mobile Number to receive OTP</string>
-	<string name="send_otp">Send OTP</string>
-	
-	<string name="otp">OTP</string>
-	<string name="enter_code">Enter the code we just sent you at</string>>
-	<string name="resend_code">Resend Code</string>
-	<string name="submit">Submit</string>
-	
-	<string name="profile">Profile</string>
-	<string name="Gender">Gender</string>
-	<string name="Male">Male</string>
-	<string name="Female">Female</string>
-	<string name="DOB">Date Of Birth</string>
-	<string name="AgeIn">Age Interest</string>
-	<string name="Interest">Interest</string>
-	<string name="Loc">Location</string>
-	<string name="lets_go">Let\'s Go</string>
+    <string name="app_name">Buddie</string>
+
+    <string name="lets_get_started">Let\'s get started</string>
+
+    <string name="login">LOGIN</string>
+    <string name="receive_otp_text">Enter your Mobile Number to receive OTP</string>
+    <string name="send_otp">Send OTP</string>
+
+    <string name="otp">OTP</string>
+    <string name="enter_code">Enter the code we just sent you at</string>>
+    <string name="resend_code">Resend Code</string>
+    <string name="submit">Submit</string>
+
+    <string name="profile">Profile</string>
+    <string name="Gender">Gender</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="DOB">Date Of Birth</string>
+    <string name="AgeIn">Age Interest</string>
+    <string name="Interest">Interest</string>
+    <string name="Loc">Location</string>
+    <string name="lets_go">Let\'s Go</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

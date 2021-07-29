@@ -29,7 +29,7 @@
 					android:textSize="30sp"
 					android:textStyle="bold"
 					app:layout_constraintTop_toTopOf="parent" />
-				
+
 				<androidx.cardview.widget.CardView
 					android:id="@+id/cv_image"
 					android:layout_width="150dp"
@@ -39,8 +39,23 @@
 					android:layout_marginEnd="56dp"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@id/tv_title" />
-				
+					app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+				</androidx.cardview.widget.CardView>
+
+				<com.google.android.material.floatingactionbutton.FloatingActionButton
+					android:id="@+id/fab_add_image"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:backgroundTint="@color/white"
+					android:background="@color/design_default_color_secondary"
+					app:layout_constraintBottom_toTopOf="@id/til_first_name"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintHorizontal_bias="0.566"
+					app:layout_constraintStart_toStartOf="@id/cv_image"
+					app:layout_constraintTop_toTopOf="@id/cv_image"
+					app:layout_constraintVertical_bias="0.857" />
+
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_first_name"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -327,7 +342,7 @@
 					android:textSize="20sp"
 					app:layout_constraintBottom_toBottomOf="parent"
 					app:layout_constraintTop_toBottomOf="@id/ll_Loc" />
-			
+
 			</androidx.constraintlayout.widget.ConstraintLayout>
 		
 		</androidx.core.widget.NestedScrollView>
